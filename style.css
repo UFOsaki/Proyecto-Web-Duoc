@@ -1,0 +1,51 @@
+body{
+    background-image: url('./img/fondo.jpg'); 
+    background-size: cover; 
+    background-repeat: repeat; 
+    background-color: #f8f9fa; 
+    margin: 0;
+
+ }
+
+.carousel {
+    width: 1300px; /* Ancho deseado */
+    height: 550px; /* Alto deseado */
+    margin: 0 auto; 
+  }
+
+  /* Estilos para las tarjetas */
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+.card-body {
+    text-align: center;
+  }
+
+  /* MANGAS*/
+
+  body{
+    background-image: url('./img/fondo.jpg'); 
+    background-size: cover; 
+    background-repeat: repeat; 
+    background-color: #f8f9fa; 
+    margin: 0;
+
+ }
+ /* Estilos para las tarjetas */
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+.card-body {
+    text-align: center;
+  }
+
+.card-img-top{
+    display: flex;
+    justify-content: center;
+    width: auto;
+    height: 40dvh;
+}
