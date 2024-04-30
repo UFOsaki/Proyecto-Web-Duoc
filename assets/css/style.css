@@ -1,5 +1,5 @@
 body{
-    background-image: url('./img/fondo.jpg'); 
+    background-image: url('../img/fondo.jpg'); 
     background-size: cover; 
     background-repeat: repeat; 
     background-color: #f8f9fa; 
@@ -8,8 +8,8 @@ body{
  }
 
 .carousel {
-    width: 1300px; /* Ancho deseado */
-    height: 550px; /* Alto deseado */
+    width: 100%; /* Ancho deseado */
+    height: auto; /* Alto deseado */
     margin: 0 auto; 
   }
 
@@ -26,7 +26,7 @@ body{
   /* MANGAS*/
 
   body{
-    background-image: url('./img/fondo.jpg'); 
+    background-image: url('../img/fondo.webp'); 
     background-size: cover; 
     background-repeat: repeat; 
     background-color: #f8f9fa; 
@@ -46,6 +46,4 @@ body{
 .card-img-top{
     display: flex;
     justify-content: center;
-    width: auto;
-    height: 40dvh;
 }
