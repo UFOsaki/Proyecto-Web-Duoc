@@ -1,0 +1,146 @@
+body {
+  background-image: url('../img/fondo.webp'); 
+  background-size: cover; 
+  background-repeat: repeat; 
+  background-color: #f8f9fa; 
+  margin: 0;
+}
+
+.carousel-container {
+  width: 100%;
+  height: 50vh; /* Ajusta este valor según el porcentaje de altura que desees */
+  margin: 0 auto;
+}
+
+.carousel-inner img {
+  width: 100%;
+  height: 50vh; /* Ajusta este valor según el porcentaje de altura que desees */
+  object-fit: cover;
+  object-position: center; /* Centra la imagen */
+}
+
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.card-img-top {
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 564 / 797; /* Mantiene la relación de aspecto original */
+}
+
+/* Ajustes específicos para dispositivos pequeños */
+@media (max-width: 576px) {
+  .card {
+      height: auto; /* Ajusta la altura de la tarjeta en dispositivos pequeños */
+  }
+  .card-img-top {
+      height: auto; /* Ajusta la altura de la imagen en dispositivos pequeños */
+  }
+  .custom-navbar .navbar-brand img {
+      width: 30px;  /* Ajusta el ancho del logo en dispositivos pequeños */
+      height: 30px; /* Ajusta la altura del logo en dispositivos pequeños */
+  }
+  .custom-navbar .navbar-brand .navbar-brand-text {
+      font-size: 1rem; /* Ajusta el tamaño del texto en dispositivos pequeños */
+  }
+}
+
+/* Ajustes específicos para tablets */
+@media (min-width: 577px) and (max-width: 768px) {
+  .card {
+      height: auto; /* Ajusta la altura de la tarjeta en dispositivos tablets */
+  }
+  .card-img-top {
+      height: auto; /* Ajusta la altura de la imagen en dispositivos tablets */
+  }
+  .custom-navbar .navbar-brand img {
+      width: 40px;  /* Ajusta el ancho del logo en dispositivos tablets */
+      height: 40px; /* Ajusta la altura del logo en dispositivos tablets */
+  }
+  .custom-navbar .navbar-brand .navbar-brand-text {
+      font-size: 1.25rem; /* Ajusta el tamaño del texto en dispositivos tablets */
+  }
+}
+
+/* Ajustes específicos para pantallas más grandes */
+@media (min-width: 769px) {
+  .card {
+      height: auto; /* Ajusta la altura de la tarjeta en pantallas grandes */
+  }
+  .card-img-top {
+      height: 100%; /* Mantiene la altura original en pantallas grandes */
+      max-width: 100%;
+  }
+  .custom-navbar .navbar-brand img {
+      width: 50px;  /* Ajusta el ancho del logo en pantallas grandes */
+      height: 50px; /* Ajusta la altura del logo en pantallas grandes */
+  }
+  .custom-navbar .navbar-brand .navbar-brand-text {
+      font-size: 1.5rem; /* Ajusta el tamaño del texto en pantallas grandes */
+  }
+}
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+body.mangas {
+  background-image: url('../img/fondo.webp'); 
+  background-size: cover; 
+  background-repeat: repeat; 
+  background-color: #f8f9fa; 
+  margin: 0;
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.custom-navbar {
+  background: linear-gradient(90deg, #8B0000, #000000);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid black; /* Delineado negro */
+  font-family: 'Roboto', sans-serif; /* Fuente profesional */
+}
+
+.custom-navbar .nav-link {
+  color: white !important;
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.custom-navbar .nav-link:hover {
+  color: #ff8a80 !important;
+  text-decoration: underline;
+}
+
+.custom-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.custom-navbar .navbar-brand img {
+  margin-right: 10px;
+}
+
+.custom-navbar .navbar-brand .navbar-brand-text {
+  color: white;
+  font-weight: bold;
+}
+
+.custom-navbar .navbar-toggler {
+  border-color: white; /* Color del borde del botón */
+}
+
+.custom-navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
