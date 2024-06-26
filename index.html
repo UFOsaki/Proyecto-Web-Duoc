@@ -6,7 +6,6 @@
     <title>Comic</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -31,7 +30,7 @@
                         </li>
                     </ul>
                     <form class="d-flex flex-grow-1 mx-3 mx-md-5">
-                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchInput">
                         <button class="btn btn-outline-light" type="submit">Buscar</button>
                     </form>
                     <a class="btn btn-outline-light me-3 d-none d-lg-inline" href="#" role="button" id="cart-button">
@@ -73,47 +72,8 @@
     </div>
 
     <div class="container mt-4">
-        <div class="row">
-            <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="assets/img/berserHD.jpg" class="card-img-top img-fluid" alt="Imagen de Berserk">
-                    <div class="card-body">
-                        <h5 class="card-title">Berserk</h5>
-                        <p class="card-text">Manga de acción y fantasía.</p>
-                        <a href="#" class="btn btn-primary mt-auto">Agregar al Carro</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="assets/img/Sailor moon.jpg" class="card-img-top img-fluid" alt="Imagen de Sailor Moon">
-                    <div class="card-body">
-                        <h5 class="card-title">Sailor Moon</h5>
-                        <p class="card-text">Manga de aventuras mágicas.</p>
-                        <a href="#" class="btn btn-primary mt-auto">Agregar al Carro</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="assets/img/SpiderGwen.jpg" class="card-img-top img-fluid" alt="Imagen de Spider-Gwen">
-                    <div class="card-body">
-                        <h5 class="card-title">Spider-Gwen</h5>
-                        <p class="card-text">Cómic de superhéroes.</p>
-                        <a href="#" class="btn btn-primary mt-auto">Agregar al Carro</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="assets/img/deepool.jpg" class="card-img-top img-fluid" alt="Imagen de Deadpool">
-                    <div class="card-body">
-                        <h5 class="card-title">Deadpool</h5>
-                        <p class="card-text">Cómic de humor y acción.</p>
-                        <a href="#" class="btn btn-primary mt-auto">Agregar al Carro</a>
-                    </div>
-                </div>
-            </div>
+        <div class="row" id="cards-container">
+            <!-- Tarjetas se agregarán aquí -->
         </div>
     </div>
 
@@ -126,6 +86,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script src="assets/JS/script.js"></script>
+    <script src="assets/JS/cards.js"></script>
+    <script src="assets/JS/search.js"></script>
 </body>
 </html>
