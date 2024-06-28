@@ -1,15 +1,8 @@
+// cards.js actualizado
 document.addEventListener('DOMContentLoaded', function() {
-    const baseUrl = 'https://api-rest-manga.onrender.com/images';
+    const baseUrl = 'https://api-rest-manga.onrender.com'; // Asegúrate de que esta URL sea correcta
     const cardsContainer = document.getElementById('cards-container');
 
-    // Función para convertir la primera letra de cada palabra a mayúscula
-    function capitalizeWords(str) {
-        return str.split(' ').map(word => {
-            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        }).join(' ');
-    }
-
-    // Función para asegurar que cada palabra del título empieza con mayúscula
     function capitalizeTitle(title) {
         if (typeof title !== 'string') {
             return 'Título No Disponible';
@@ -19,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join(' ');
     }
 
-    // Función para agregar un espacio después de cada coma
     function formatGenre(genre) {
         if (Array.isArray(genre)) {
             return genre.map(word => {
@@ -34,14 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Función para crear una tarjeta
     function createCard(manga) {
         const card = document.createElement('div');
         card.className = 'col-6 col-sm-6 col-md-4 col-lg-3 mb-4';
 
         const title = capitalizeTitle(manga.title);
         const genre = formatGenre(manga.genre);
-        const imageUrl = manga.url ? `https://api-rest-manga.onrender.com${manga.url}` : 'https://via.placeholder.com/150';
+        const imageUrl = manga.url ? `${baseUrl}${manga.url}` : 'https://via.placeholder.com/150';
 
         card.innerHTML = `
             <div class="card h-100">
@@ -57,21 +48,45 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    // Función para obtener datos de la API y generar tarjetas
     async function loadMangas() {
         try {
-            for (let id = 1; id <= 10; id++) {
-                const response = await fetch(`${baseUrl}/${id.toString().padStart(3, '0')}`);
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status}`);
-                }
-                const manga = await response.json();
+            const response = await fetch(`${baseUrl}/images`);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const mangas = await response.json();
+            mangas.forEach(manga => {
                 const card = createCard(manga);
                 cardsContainer.appendChild(card);
-            }
+            });
         } catch (error) {
             console.error('Error fetching data from API:', error);
         }
+    }
+
+    document.getElementById('cards-container').addEventListener('click', function (e) {
+        if (e.target.classList.contains('btn-primary')) {
+            const card = e.target.closest('.card');
+            const title = card.querySelector('.card-title').textContent;
+            addToCart(title);
+        }
+    });
+
+    function addToCart(title) {
+        fetch('http://localhost:8000/api/carts/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ title })
+        }).then(response => {
+            if (response.ok) {
+                alert('Producto agregado al carrito');
+            } else {
+                alert('Error al agregar el producto al carrito');
+            }
+        });
     }
 
     loadMangas();

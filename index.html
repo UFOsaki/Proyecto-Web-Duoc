@@ -11,9 +11,13 @@
     <header>
         <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
             <div class="container-fluid">
-                <a class="navbar-brand" href="./index.html">
+                <a class="navbar-brand d-flex align-items-center" href="./index.html">
                     <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+                    <span class="d-none d-lg-inline ms-2 navbar-brand-text">Sharingan Comics</span>
                 </a>
+                <form class="d-flex mx-3 flex-grow-1">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchInput">
+                </form>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -29,19 +33,19 @@
                             <a class="nav-link" href="#">Marvel</a>
                         </li>
                     </ul>
-                    <form class="d-flex flex-grow-1 mx-3 mx-md-5">
-                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchInput">
-                        <button class="btn btn-outline-light" type="submit">Buscar</button>
-                    </form>
                     <a class="btn btn-outline-light me-3 d-none d-lg-inline" href="#" role="button" id="cart-button">
                         <i class="fas fa-shopping-cart"></i> Carrito
                     </a>
-                    <a class="btn btn-outline-light me-3 d-none d-lg-inline" href="#" role="button" id="login-button">
-                        Login
-                    </a>
-                    <a class="btn btn-outline-light me-3 d-none d-lg-inline" href="#" role="button" id="signup-button">
-                        Sign Up
-                    </a>
+                    <a class="btn btn-outline-light me-3 d-none d-lg-inline" href="login.html" role="button" id="login-button">Login</a>
+                    <a class="btn btn-outline-light me-3 d-none d-lg-inline" href="signup.html" role="button" id="signup-button">Sign Up</a>
+                    <ul class="navbar-nav d-lg-none">
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.html">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="signup.html">Sign Up</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -84,9 +88,9 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" integrity="sha512-YYgZDJw5gT/vpOMWxA9OsH6n+LsXB16j8bCzDmpfNPAUsZbrh3jV5qD/F7gz6Nf1h8kgJZL9VixGfVPKAc8dJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script src="assets/JS/cards.js"></script>
+    <script src="assets/js/cards.js"></script>
     <script src="assets/JS/search.js"></script>
 </body>
 </html>
