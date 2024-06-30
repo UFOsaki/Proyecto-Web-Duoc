@@ -1,6 +1,6 @@
 // cards.js actualizado
 document.addEventListener('DOMContentLoaded', function() {
-    const baseUrl = 'https://api-rest-manga.onrender.com'; // Asegúrate de que esta URL sea correcta
+    const baseUrl = 'https://api-rest-manga.onrender.com';
     const cardsContainer = document.getElementById('cards-container');
 
     function capitalizeTitle(title) {
@@ -72,22 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function addToCart(title) {
-        fetch('http://localhost:8000/api/carts/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify({ title })
-        }).then(response => {
-            if (response.ok) {
-                alert('Producto agregado al carrito');
-            } else {
-                alert('Error al agregar el producto al carrito');
-            }
-        });
-    }
 
     loadMangas();
 });

@@ -1,21 +1,16 @@
-// signup.js
-document.getElementById('signup-form').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+import { showStep, nextStep, prevStep, finalizeRegistration } from './formHelpers.js';
+import './dataHelpers.js';
 
-    const response = await fetch('http://localhost:8000/api/users/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, email, password }),
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("signup-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        finalizeRegistration();
     });
 
-    if (response.ok) {
-        window.location.href = 'login.html';
-    } else {
-        alert('Sign up failed');
-    }
+    document.getElementById("next-step-1").addEventListener("click", nextStep);
+    document.getElementById("next-step-2").addEventListener("click", nextStep);
+    document.getElementById("next-step-3").addEventListener("click", nextStep);
+    document.getElementById("prev-step-2").addEventListener("click", prevStep);
+    document.getElementById("prev-step-3").addEventListener("click", prevStep);
+    document.getElementById("prev-step-4").addEventListener("click", prevStep);
 });
