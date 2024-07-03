@@ -1,9 +1,9 @@
-import { showStep, nextStep, prevStep, finalizeRegistration } from './formHelpers.js';
-import './dataHelpers.js';
+import { showStep, nextStep, prevStep, finalizeRegistration } from './formHelper.js';
+import './dataHelper.js';
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("signup-form").addEventListener("submit", (event) => {
-        event.preventDefault();
+    document.getElementById("signup-form").addEventListener("submit", (e) => {
+        e.preventDefault();
         finalizeRegistration();
     });
 

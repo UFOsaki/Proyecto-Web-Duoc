@@ -1,3 +1,4 @@
+
 export const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -21,13 +22,19 @@ export const validatePhone = (phone) => {
     return phoneRegex.test(phone);
 };
 
-export const validateFormStep = (step) => {
+//función para verificar si el correo ya existe
+export const emailExists = (email, usersData) => {
+    return usersData.some(user => user.email === email);
+};
+
+// Validación del formulario
+export const validateFormStep = (step, usersData) => {
     let valid = true;
     const inputs = step.querySelectorAll("input, textarea, select");
 
     inputs.forEach(input => {
         if (input.id !== 'apartment-number' && input.id !== 'comments' && !validateNotEmpty(input.value)) {
-            input.setCustomValidity("Este campo es requerido.");
+            input.setCustomValidity("Campo obligatorio.");
             input.reportValidity();
             valid = false;
         } else {
@@ -41,8 +48,12 @@ export const validateFormStep = (step) => {
             document.getElementById("email").setCustomValidity("Por favor ingrese un correo válido.");
             document.getElementById("email").reportValidity();
             valid = false;
+        } else if (emailExists(email, usersData)) {
+            document.getElementById("email").setCustomValidity("El correo electrónico ya está registrado.");
+            document.getElementById("email").reportValidity();
+            valid = false;
         }
-        
+
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirm-password").value;
         if (!validatePasswordsMatch(password, confirmPassword)) {
@@ -76,4 +87,9 @@ export const validateFormStep = (step) => {
     }
 
     return valid;
+};
+
+// Función para verificar si el username o el email existen
+export const userExists = (input, usersData) => {
+    return usersData.some(user => user.username === input || user.email === input);
 };
