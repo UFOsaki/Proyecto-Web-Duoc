@@ -1,4 +1,3 @@
-// cards.js actualizado
 document.addEventListener('DOMContentLoaded', function() {
     const baseUrl = 'https://api-rest-manga.onrender.com';
     const cardsContainer = document.getElementById('cards-container');
@@ -14,15 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function formatGenre(genre) {
         if (Array.isArray(genre)) {
-            return genre.map(word => {
+            return 'Géneros: ' + genre.map(word => {
                 return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
             }).join(', ');
         } else if (typeof genre === 'string') {
-            return genre.replace(/,/g, ', ').split(', ').map(word => {
+            return 'Géneros: ' + genre.replace(/,/g, ', ').split(', ').map(word => {
                 return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
             }).join(', ');
         } else {
-            return 'Género No Disponible';
+            return 'Géneros: No Disponible';
         }
     }
 
@@ -40,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card-body">
                     <h5 class="card-title">${title}</h5>
                     <p class="card-text">${genre}</p>
-                    <a href="#" class="btn btn-primary mt-auto">Agregar al Carro</a>
+                    <a href="#" class="btn btn-primary mt-auto details-button" data-id="${manga.id}">Ver más detalles</a>
                 </div>
             </div>
         `;
@@ -65,13 +64,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('cards-container').addEventListener('click', function (e) {
-        if (e.target.classList.contains('btn-primary')) {
-            const card = e.target.closest('.card');
-            const title = card.querySelector('.card-title').textContent;
-            addToCart(title);
+        if (e.target.classList.contains('details-button')) {
+            e.preventDefault();
+            const mangaId = e.target.getAttribute('data-id');
+            showDetailsModal(mangaId);
         }
     });
 
+    async function showDetailsModal(mangaId) {
+        try {
+            const response = await fetch(`${baseUrl}/images/${mangaId}`);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const manga = await response.json();
+            document.getElementById('modal-title').textContent = capitalizeTitle(manga.title);
+            document.getElementById('modal-genres').textContent = formatGenre(manga.genre);
+            document.getElementById('modal-synopsis').textContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+            document.getElementById('modal-price').textContent = Math.floor(Math.random() * (35000 - 2000 + 1)) + 2000;
+            document.getElementById('modal-image').src = manga.url ? `${baseUrl}${manga.url}` : 'https://via.placeholder.com/150';
+            document.getElementById('add-to-cart-button').setAttribute('data-id', manga.id);
+            const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            detailsModal.show();
+        } catch (error) {
+            console.error('Error fetching details from API:', error);
+        }
+    }
 
     loadMangas();
 });

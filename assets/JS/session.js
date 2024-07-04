@@ -8,7 +8,7 @@ const checkSession = () => {
     existingButtons.forEach(button => button.remove());
 
     if (isLoggedIn) {
-        console.log('Usuario logueado'); // Verificación
+        console.log('Usuario logueado'); 
         const profileLink = document.createElement('a');
         profileLink.href = 'profile.html';
         profileLink.className = 'btn btn-outline-light me-3 d-none d-lg-inline';
@@ -25,7 +25,7 @@ const checkSession = () => {
         const mobileNav = document.querySelector('ul.navbar-nav.d-lg-none');
         mobileNav.appendChild(mobileProfileLink);
     } else {
-        console.log('Usuario no logueado'); // Verificación
+        console.log('Usuario no logueado'); 
         const loginButton = document.createElement('a');
         loginButton.href = 'login.html';
         loginButton.className = 'btn btn-outline-light me-3 d-none d-lg-inline';

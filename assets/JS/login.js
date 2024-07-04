@@ -1,10 +1,9 @@
 import { loadUsersDataFromLocalStorage } from './storageHelper.js';
 
-// Función para manejar el evento de envío del formulario
 const handleLogin = (event) => {
     event.preventDefault();
     
-    const input = document.getElementById('username').value; // Puede ser username o email
+    const input = document.getElementById('username').value; 
     const password = document.getElementById('password').value;
 
     console.log('Ingresado:', { input, password });
@@ -18,7 +17,7 @@ const handleLogin = (event) => {
         alert('Login exitoso!');
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('loggedInUser', JSON.stringify(user));
-        window.location.href = 'index.html'; // Redirigir al index
+        window.location.href = 'index.html'; 
     } else {
         alert('Username, email o password incorrectos.');
     }
