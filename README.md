@@ -1,1 +1,1 @@
-Proyecto Web Realizado Para DuocUC con fines academicos
+Proyecto Web Realizado Para DuocUC
