@@ -1,0 +1,18 @@
+/* Estilos para el navbar */
+.navbar-brand d-flex align-items-center {
+    display: flex;
+    align-items: center;
+}
+/* Estilos para la imagen del logo en el navbar */
+img.navbar-logo {
+    height: 80px;
+    width: 100px;
+    object-fit: contain;
+    border-radius: 50%;
+    display: block; /* Asegura que la imagen se comporte como un bloque para evitar problemas de alineación */
+}
+/* Estilos para el texto del navbar */
+.d-none d-lg-inline ms-2 navbar-brand-text {
+    font-size: 2.5rem;
+    display: none;
+}
