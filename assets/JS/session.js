@@ -1,41 +1,49 @@
-// Función para verificar el estado de la sesión y actualizar la UI
 const checkSession = () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const navbarContainer = document.querySelector('.navbar .container-fluid');
 
-    // Limpiar cualquier enlace existente en la barra de navegación
-    const existingButtons = document.querySelectorAll('#login-button, #signup-button, #profile-link');
+    // Limpiar botones existentes incluyendo el carrito
+    const existingButtons = document.querySelectorAll(
+        '#login-button, #signup-button, #profile-link, #cart-button'
+    );
     existingButtons.forEach(button => button.remove());
 
+    // Carrito — siempre visible
+    const cartButton = document.createElement('a');
+    cartButton.href = '#';
+    cartButton.className = 'btn btn-outline-light me-2';
+    cartButton.role = 'button';
+    cartButton.id = 'cart-button';
+    cartButton.innerHTML = '<i class="fas fa-shopping-cart"></i> Carrito';
+    navbarContainer.appendChild(cartButton);
+
     if (isLoggedIn) {
-        console.log('Usuario logueado'); 
+        console.log('Usuario logueado');
         const profileLink = document.createElement('a');
         profileLink.href = 'profile.html';
-        profileLink.className = 'btn btn-outline-light me-3 d-none d-lg-inline';
+        profileLink.className = 'btn btn-outline-light me-2';
         profileLink.role = 'button';
         profileLink.textContent = 'Profile';
         profileLink.id = 'profile-link';
-
         navbarContainer.appendChild(profileLink);
 
-        // Añadir enlace de perfil en dispositivos móviles
         const mobileProfileLink = document.createElement('li');
-        mobileProfileLink.className = 'nav-item d-lg-none';
+        mobileProfileLink.className = 'nav-item';
         mobileProfileLink.innerHTML = '<a class="nav-link" href="profile.html">Profile</a>';
-        const mobileNav = document.querySelector('ul.navbar-nav.d-lg-none');
-        mobileNav.appendChild(mobileProfileLink);
+        document.querySelector('ul.navbar-nav').appendChild(mobileProfileLink);
+
     } else {
-        console.log('Usuario no logueado'); 
+        console.log('Usuario no logueado');
         const loginButton = document.createElement('a');
         loginButton.href = 'login.html';
-        loginButton.className = 'btn btn-outline-light me-3 d-none d-lg-inline';
+        loginButton.className = 'btn btn-outline-light me-2';
         loginButton.role = 'button';
         loginButton.textContent = 'Login';
         loginButton.id = 'login-button';
 
         const signupButton = document.createElement('a');
         signupButton.href = 'signup.html';
-        signupButton.className = 'btn btn-outline-light me-3 d-none d-lg-inline';
+        signupButton.className = 'btn btn-outline-light';
         signupButton.role = 'button';
         signupButton.textContent = 'Sign Up';
         signupButton.id = 'signup-button';
@@ -43,20 +51,26 @@ const checkSession = () => {
         navbarContainer.appendChild(loginButton);
         navbarContainer.appendChild(signupButton);
 
-        // Añadir enlaces de login y signup en dispositivos móviles
+        const mobileNav = document.querySelector('ul.navbar-nav');
+
         const mobileLoginLink = document.createElement('li');
-        mobileLoginLink.className = 'nav-item d-lg-none';
+        mobileLoginLink.className = 'nav-item';
         mobileLoginLink.innerHTML = '<a class="nav-link" href="login.html">Login</a>';
-        
+
         const mobileSignupLink = document.createElement('li');
-        mobileSignupLink.className = 'nav-item d-lg-none';
+        mobileSignupLink.className = 'nav-item';
         mobileSignupLink.innerHTML = '<a class="nav-link" href="signup.html">Sign Up</a>';
 
-        const mobileNav = document.querySelector('ul.navbar-nav.d-lg-none');
         mobileNav.appendChild(mobileLoginLink);
         mobileNav.appendChild(mobileSignupLink);
     }
+
+    // Reasignar evento al carrito
+    document.getElementById('cart-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+        cartOffcanvas.show();
+    });
 };
 
-// Ejecutar la función al cargar el DOM
 document.addEventListener('DOMContentLoaded', checkSession);

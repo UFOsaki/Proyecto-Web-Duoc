@@ -1,17 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const cartButton = document.createElement('a');
-    cartButton.href = '#';
-    cartButton.className = 'btn btn-outline-light me-3 d-none d-lg-inline';
-    cartButton.role = 'button';
-    cartButton.id = 'cart-button';
-    cartButton.innerHTML = '<i class="fas fa-shopping-cart"></i> Carrito';
-    const navbarContainer = document.querySelector('.navbar .container-fluid');
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-
-    if (isLoggedIn) {
-        navbarContainer.appendChild(cartButton);
-    }
-
+    
     const cartItemsContainer = document.getElementById('cart-items');
     const cartTotalElement = document.getElementById('cart-total');
 
@@ -65,12 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('cart', JSON.stringify(cart));
         loadCart();
     }
-
-    cartButton.addEventListener('click', function() {
-        const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
-        cartOffcanvas.show();
-        loadCart();
-    });
 
     cartItemsContainer.addEventListener('click', function(e) {
         if (e.target.classList.contains('add-item')) {
