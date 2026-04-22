@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     cartButton.role = 'button';
     cartButton.id = 'cart-button';
     cartButton.innerHTML = '<i class="fas fa-shopping-cart"></i> Carrito';
+    
     const navbarContainer = document.querySelector('.navbar .container-fluid');
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-    if (isLoggedIn) {
+    
+    if (navbarContainer) {
         navbarContainer.appendChild(cartButton);
     }
 
@@ -66,8 +67,11 @@ document.addEventListener('DOMContentLoaded', function() {
         loadCart();
     }
 
-    cartButton.addEventListener('click', function() {
-        const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+    
+    cartButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const cartOffcanvasElement = document.getElementById('cartOffcanvas');
+        const cartOffcanvas = new bootstrap.Offcanvas(cartOffcanvasElement);
         cartOffcanvas.show();
         loadCart();
     });
@@ -87,23 +91,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.getElementById('add-to-cart-button').addEventListener('click', function() {
-        const mangaId = this.getAttribute('data-id');
-        fetch(`https://api-rest-manga.onrender.com/images/${mangaId}`)
-            .then(response => response.json())
-            .then(manga => {
-                const mangaToAdd = {
-                    title: manga.title,
-                    price: Math.floor(Math.random() * (35000 - 2000 + 1)) + 2000
-                };
-                addToCart(mangaToAdd);
-                const detailsModal = bootstrap.Modal.getInstance(document.getElementById('detailsModal'));
-                detailsModal.hide();
-            })
-            .catch(error => console.error('Error adding manga to cart:', error));
-    });
+    
+    const addToCartBtn = document.getElementById('add-to-cart-button');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function() {
+            const mangaId = this.getAttribute('data-id');
+            fetch(`https://api-rest-manga.onrender.com/images/${mangaId}`)
+                .then(response => response.json())
+                .then(manga => {
+                    const mangaToAdd = {
+                        title: manga.title,
+                        price: Math.floor(Math.random() * (35000 - 2000 + 1)) + 2000
+                    };
+                    addToCart(mangaToAdd);
+                    const detailsModalElement = document.getElementById('detailsModal');
+                    const detailsModal = bootstrap.Modal.getInstance(detailsModalElement);
+                    if (detailsModal) detailsModal.hide();
+                })
+                .catch(error => console.error('Error adding manga to cart:', error));
+        });
+    }
 
     document.getElementById('checkout-button').addEventListener('click', function() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            alert('El carrito está vacío');
+            return;
+        }
         alert('Compra realizada con éxito');
         localStorage.removeItem('cart');
         loadCart();
