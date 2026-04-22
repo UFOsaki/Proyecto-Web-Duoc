@@ -1,153 +1,111 @@
-/* ============================================
-   SHARINGAN COMICS — login.css
-   Mobile First
-   ============================================ */
-
-/* ── Base móvil ── */
 body {
-  background-color: #1d8dc5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-  padding: 16px;
+    background-color: #1d8dc5; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    padding: 0 20px; 
 }
 
 .container {
-  max-width: 100%;
-  width: 100%;
-  padding: 24px 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  background-color: #ffffff;
-  transition: all 0.3s ease-in-out;
-  position: relative;
+    max-width: 400px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    margin-top: 5%;
 }
 
 .container:hover {
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* ── Logo ── */
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-  text-decoration: none;
-}
-
-img.navbar-logo {
-  height: 64px;
-  width: 80px;
-  object-fit: contain;
-  border-radius: 50%;
-  display: block;
-}
-
-.navbar-brand-text {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #1d8dc5;
-  margin-left: 10px;
-}
-
-/* ── Enlace volver ── */
 .back-link {
-  position: absolute;
-  top: 10px;
-  left: 16px;
-  color: #1d8dc5;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 0.85rem;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    color: #1d8dc5;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+    text-decoration: underline;
+}
+
+/* ── Logo (igual que signup) ── */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+img.navbar-logo {
+    height: 80px;
+    width: 100px;
+    object-fit: contain;
+    border-radius: 50%;
+    display: block;
+}
+
+.navbar-brand-text {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #1d8dc5;
+    margin-left: 10px;
 }
 
 /* ── Formulario ── */
 .form-title {
-  margin-bottom: 24px;
-  text-align: center;
-  color: #1d8dc5;
-  font-size: 1.3rem;
-  font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #1d8dc5; 
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .form-label {
-  font-weight: bold;
-  color: #333333;
-  font-size: 0.9rem;
+    font-weight: bold;
+    color: #333333;
 }
 
 .form-control {
-  border: 1px solid #1d8dc5;
-  padding: 10px;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
+    border: 1px solid #1d8dc5; 
+    padding: 10px;
+    margin-bottom: 20px;
 }
 
 .btn-primary {
-  background-color: #1d8dc5;
-  border-color: #1d8dc5;
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 8px;
-  font-size: 0.95rem;
+    background-color: #1d8dc5; 
+    border-color: #1d8dc5;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .btn-primary:hover {
-  background-color: #155a8a;
-  border-color: #155a8a;
+    background-color: #155a8a; 
+    border-color: #155a8a;
 }
 
 .form-footer {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 0.85rem;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .form-footer a {
-  color: #1d8dc5;
-  text-decoration: none;
+    color: #1d8dc5; 
+    text-decoration: none;
 }
 
 .form-footer a:hover {
-  text-decoration: underline;
-}
-
-/* ============================================
-   SM >= 576px
-   ============================================ */
-@media (min-width: 576px) {
-  body { padding: 20px; }
-
-  .container {
-    max-width: 420px;
-    padding: 32px 28px;
-  }
-
-  img.navbar-logo       { height: 72px; width: 90px; }
-  .form-title           { font-size: 1.4rem; }
-  .form-label           { font-size: 0.95rem; }
-  .form-control         { font-size: 0.95rem; }
-  .navbar-brand-text    { font-size: 1.5rem; }
-}
-
-/* ============================================
-   MD >= 768px
-   ============================================ */
-@media (min-width: 768px) {
-  .container {
-    max-width: 440px;
-    padding: 40px;
-  }
-
-  img.navbar-logo { height: 80px; width: 100px; }
-  .form-title     { font-size: 1.5rem; }
+    text-decoration: underline;
 }
