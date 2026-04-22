@@ -1,18 +1,82 @@
-/* Estilos para el navbar */
-.navbar-brand d-flex align-items-center {
-    display: flex;
-    align-items: center;
-}
-/* Estilos para la imagen del logo en el navbar */
+/* ============================================
+   SHARINGAN COMICS — signUp.css
+   Mobile First
+   ============================================ */
+
+/* ── Logo — base móvil ── */
 img.navbar-logo {
+  height: 64px;
+  width: 80px;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  text-decoration: none;
+}
+
+.navbar-brand-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1d8dc5;
+  margin-left: 10px;
+  display: none;   /* oculto en móvil muy pequeño */
+}
+
+/* ── Formulario steps ── */
+.step {
+  width: 100%;
+}
+
+.step .form-label {
+  font-size: 0.9rem;
+}
+
+.step .form-control {
+  font-size: 0.9rem;
+  padding: 10px;
+}
+
+.step .btn {
+  width: 100%;
+  font-size: 0.95rem;
+  padding: 10px;
+  margin-top: 6px;
+}
+
+/* ============================================
+   SM >= 576px
+   ============================================ */
+@media (min-width: 576px) {
+  img.navbar-logo {
+    height: 72px;
+    width: 90px;
+  }
+
+  .navbar-brand-text {
+    display: inline;   /* visible desde tablet pequeña */
+    font-size: 1.4rem;
+  }
+
+  .step .form-label   { font-size: 0.95rem; }
+  .step .form-control { font-size: 0.95rem; }
+}
+
+/* ============================================
+   MD >= 768px
+   ============================================ */
+@media (min-width: 768px) {
+  img.navbar-logo {
     height: 80px;
     width: 100px;
-    object-fit: contain;
-    border-radius: 50%;
-    display: block; /* Asegura que la imagen se comporte como un bloque para evitar problemas de alineación */
-}
-/* Estilos para el texto del navbar */
-.d-none d-lg-inline ms-2 navbar-brand-text {
-    font-size: 2.5rem;
-    display: none;
+  }
+
+  .navbar-brand-text {
+    font-size: 1.6rem;
+  }
 }
