@@ -5,40 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-brands/css/uicons-brands.css">
     
 </head>
 <body >
      <header>
-        <nav class="navbar navbar-dark bg-dark">
+       <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
             <div class="container-fluid">
-                <a class="navbar-brand" href="./index.html">Contacto</a>
+                <a class="navbar-brand d-flex align-items-center" href="./index.html">
+                    <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+                    <span class="d-none d-lg-inline ms-2 navbar-brand-text">Sharingan Comics</span>
+                </a>
+                <form class="d-flex mx-3 flex-grow-1">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchInput">
+                </form>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="./index.html">Inicio</a>
-                        </li>                        <li class="nav-item">
-                            <a class="nav-link" href="./mangas.html">Mangas</a>
-                        </li>                        <li class="nav-item">
+                            <a class="nav-link" href="./mangas.html" >Mangas</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="./DC.html">DC</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./marvel.html">Marvel</a>
+                            <a class="nav-link" href="./Marvel.html">Marvel</a>
                         </li>
-
-
                     </ul>
+                    <!-- El botón del carrito se generará dinámicamente -->
                 </div>
             </div>
         </nav>
-
     </header>
 
-<div class="container">
+<div class="container mt-5">
+  <div class="caja-contacto">
 <h1 class="display-6" class="container" >Quiénes somos</h1>
 <p class="container" style="font-size:20px;"><em>Somos una empresa dedicada a la venta de mangas y cómics de las principales editoriales del mercado, comprometida con acercar a lectores y coleccionistas a las historias, personajes y universos que más les apasionan. Nuestro catálogo abarca desde clásicos imprescindibles hasta las novedades más recientes, ofreciendo una amplia variedad de títulos para todas las edades y gustos.
 
@@ -70,12 +74,43 @@ Nuestro objetivo no es solo vender, sino también crear una comunidad de aficion
     Twitter/X: @mundomanga
   </i></li>
 </ul>
-    <p><h5><em><li>Horario de atención: </li></em></h5></p>
+    <h1 class="display-6">Horario de Atención</h1>
     <ul style="font-size:20px;">
-    <p><em><li> Lunes a Viernes: 10:00 – 19:00</li></em></p>
+    <p><em><li>Lunes a Viernes: 10:00 – 19:00</li></em></p>
     <p><em><li>Sábados: 11:00 – 17:00</li></em></p>
     <p><em><li>Domingos y festivos: Cerrado</li></em></p>
     </ul>
+
+<h1 class="display-6">También puedes contactarnos rellenando el siguiente formulario</h1>
+<form>
+      
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" placeholder="Ingresa tu nombre" required>
+        </div>
+
+       
+        <div class="mb-3">
+            <label class="form-label">Correo</label>
+            <input type="email" class="form-control" placeholder="ejemplo@email.com" required>
+        </div>
+
+    
+        <div class="mb-3">
+            <label class="form-label">Número</label>
+            <input type="tel" class="form-control" placeholder="+56 9 1234 5678" required>
+        </div>
+
+     
+        <div class="mb-3">
+            <label class="form-label">Razón de contacto</label>
+            <textarea class="form-control" rows="3" placeholder="Escribe tu mensaje..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-custom">Enviar</button>
+    </form>
+
+
 
 
 <div class="container mt-5">
@@ -87,7 +122,7 @@ Nuestro objetivo no es solo vender, sino también crear una comunidad de aficion
         <div class="card-body">
           <h5 class="card-title">otra sucursal</h5>
           <p class="card-text">Dirección.</p>
-
+          <a href="#" class="btn btn-primary">Ir</a>
         </div>
       </div>
     </div>
@@ -98,7 +133,7 @@ Nuestro objetivo no es solo vender, sino también crear una comunidad de aficion
         <div class="card-body">
           <h5 class="card-title">Otra sucursal</h5>
           <p class="card-text">Dirección.</p>
-
+          <a href="#" class="btn btn-primary">Ir</a>
         </div>
       </div>
     </div>
@@ -124,8 +159,8 @@ Nuestro objetivo no es solo vender, sino también crear una comunidad de aficion
         </div>
       </div>
     </div>
-
   </div>
+</div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
