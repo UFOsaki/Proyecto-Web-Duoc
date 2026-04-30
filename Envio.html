@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dirección de envío</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header>
+        <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="./index.html">
+                    <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+                    <span class="d-none d-lg-inline ms-2 navbar-brand-text">Sharingan Comics</span>
+                </a>
+            
+                <div class="collapse navbar-collapse" id="navbarNav">
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-5">
+  <div class="caja-contacto">
+
+    <h1>Dirección de envío</h1>
+
+  <form id="shipping-form">
+    
+    <!-- Datos personales -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label>Nombre completo</label>
+        <input type="text" class="form-control" id="nombre" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Teléfono</label>
+        <input type="tel" class="form-control" id="telefono" required>
+      </div>
+    </div>
+
+    <!-- Dirección -->
+    <div class="mb-3">
+      <label>Dirección (calle y número)</label>
+      <input type="text" class="form-control" id="direccion" required>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label>Depto / Casa</label>
+        <input type="text" class="form-control" id="extra">
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Comuna</label>
+        <input type="text" class="form-control" id="comuna" required>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Ciudad</label>
+        <input type="text" class="form-control" id="ciudad" required>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Región</label>
+      <input type="text" class="form-control" id="region" required>
+    </div>
+
+    <!-- Envío -->
+    <div class="mb-3">
+      <label>Tipo de envío</label>
+      <select class="form-select" id="envio">
+        <option value="normal">Envío estándar (2-3 días)</option>
+        <option value="express">Envío express (24h)</option>
+      </select>
+    </div>
+
+    <!-- Instrucciones -->
+    <div class="mb-3">
+      <label>Instrucciones de entrega</label>
+      <textarea class="form-control" id="instrucciones"></textarea>
+    </div>
+
+    <!-- Botón -->
+    <button type="submit" class="btn btn-success">Continuar</button>
+
+  </form>
+</div>
+
+
+<script src="js/direccionenvio.js"></script>
+</body>
+</html>
