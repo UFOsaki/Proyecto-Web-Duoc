@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ──────────────────────────────────────────
     const cartItemsContainer = document.getElementById('cart-items');
     const cartTotalElement = document.getElementById('cart-total');
+    const PAYMENT_API_BASE_URL = 'https://ms-sharingan-comics-pay-mercado-pago.onrender.com/';
 
     // ──────────────────────────────────────────
     // HELPERS
@@ -51,6 +52,33 @@ document.addEventListener('DOMContentLoaded', function () {
         return Number(price).toLocaleString('es-CL');
     }
 
+    function getLoggedUser() {
+        return JSON.parse(localStorage.getItem('loggedInUser')) || null;
+    }
+
+    function buildCheckoutPayload() {
+        const cart = getCart();
+        const loggedUser = getLoggedUser();
+
+        if (!loggedUser || !loggedUser.email) {
+            throw new Error('Debes iniciar sesión antes de pagar.');
+        }
+
+        if (!cart.length) {
+            throw new Error('El carrito está vacío.');
+        }
+
+        return {
+            buyerEmail: loggedUser.email,
+            items: cart.map(item => ({
+                productCode: item.productCode,
+                title: item.title,
+                description: item.description || 'Sin descripción',
+                quantity: item.quantity,
+                unitPrice: item.unitPrice
+            }))
+        };
+    }
     // ──────────────────────────────────────────
     // RENDERIZADO DEL CARRITO
     // ──────────────────────────────────────────
@@ -214,9 +242,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Checkout
     document.getElementById('checkout-button').addEventListener('click', function () {
-        alert('¡Compra realizada con éxito! Gracias por tu pedido.');
-        localStorage.removeItem('cart');
-        loadCart();
+        try {
+            const checkoutPayload = buildCheckoutPayload();
+
+            console.log('Payload preparado para Mercado Pago:', checkoutPayload);
+
+            alert('Payload de pago generado correctamente. Revisa la consola.');
+
+            // Más adelante aquí haremos el fetch al backend Spring Boot.
+            // Por ahora NO limpiamos el carrito todavía.
+
+        } catch (error) {
+            console.error('Error al preparar el checkout:', error);
+            alert(error.message);
+        }
     });
 
     // ──────────────────────────────────────────
