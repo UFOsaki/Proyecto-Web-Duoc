@@ -53,14 +53,6 @@ const checkSession = () => {
 
         const mobileNav = document.querySelector('ul.navbar-nav');
 
-        const mobileLoginLink = document.createElement('li');
-        mobileLoginLink.className = 'nav-item';
-        mobileLoginLink.innerHTML = '<a class="nav-link" href="login.html">Login</a>';
-
-        const mobileSignupLink = document.createElement('li');
-        mobileSignupLink.className = 'nav-item';
-        mobileSignupLink.innerHTML = '<a class="nav-link" href="signup.html">Sign Up</a>';
-
         mobileNav.appendChild(mobileLoginLink);
         mobileNav.appendChild(mobileSignupLink);
     }

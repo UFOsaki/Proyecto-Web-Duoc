@@ -179,9 +179,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         } catch (error) {
             console.error('Error al cargar el catálogo desde la API:', error);
-            showError('No se pudo cargar el catálogo. Verifica tu conexión a internet.');
-        }
-    }
+            cardsContainer.innerHTML = `
+            <div class="alert alert-warning text-center">
+            No se pudo cargar la API externa. Se recomienda usar respaldo local o verificar el servicio en Render.
+            </div>
+  `;    
+}
 
     // ──────────────────────────────────────────
     // MODAL DE DETALLE
@@ -244,5 +247,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // ──────────────────────────────────────────
     // INICIALIZACIÓN
     // ──────────────────────────────────────────
-    loadMangas();
-});
+    loadMangas()
+};
+})
