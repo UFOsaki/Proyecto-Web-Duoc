@@ -1,31 +1,68 @@
-import { showStep, nextStep, prevStep, finalizeRegistration } from './formHelper.js';
+import {
+    saveUsersDataToLocalStorage,
+    loadUsersDataFromLocalStorage
+} from './storageHelper.js';
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', () => {
+    const signupForm = document.getElementById('signup-form');
 
-    // Botones de avance
-    const btnNext1 = document.getElementById("next-step-1");
-    const btnNext2 = document.getElementById("next-step-2");
-    const btnNext3 = document.getElementById("next-step-3");
-
-    // Botones de retroceso
-    const btnPrev2 = document.getElementById("prev-step-2");
-    const btnPrev3 = document.getElementById("prev-step-3");
-    const btnPrev4 = document.getElementById("prev-step-4");
-
-    // Asignar eventos solo si el elemento existe en el HTML
-    if (btnNext1) btnNext1.addEventListener("click", nextStep);
-    if (btnNext2) btnNext2.addEventListener("click", nextStep);
-    if (btnNext3) btnNext3.addEventListener("click", nextStep);
-    if (btnPrev2) btnPrev2.addEventListener("click", prevStep);
-    if (btnPrev3) btnPrev3.addEventListener("click", prevStep);
-    if (btnPrev4) btnPrev4.addEventListener("click", prevStep);
-
-    // Submit final
-    const form = document.getElementById("signup-form");
-    if (form) {
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            finalizeRegistration();
-        });
+    if (!signupForm) {
+        console.error('No se encontró el formulario con id="signup-form"');
+        return;
     }
+
+    signupForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (!username || !email || !password || !confirmPassword) {
+            alert('Debes completar todos los campos.');
+            return;
+        }
+
+        if (!email.includes('@')) {
+            alert('Debes ingresar un correo válido.');
+            return;
+        }
+
+        if (password.length < 6) {
+            alert('La contraseña debe tener al menos 6 caracteres.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('Las contraseñas no coinciden.');
+            return;
+        }
+
+        const usersData = loadUsersDataFromLocalStorage();
+
+        const userAlreadyExists = usersData.some(user =>
+            user.email === email || user.username === username
+        );
+
+        if (userAlreadyExists) {
+            alert('Ya existe una cuenta con ese correo o nombre de usuario.');
+            return;
+        }
+
+        const newUser = {
+            id: crypto.randomUUID(),
+            username,
+            email,
+            password,
+            phone: '',
+            createdAt: new Date().toISOString()
+        };
+
+        usersData.push(newUser);
+        saveUsersDataToLocalStorage(usersData);
+
+        alert('Cuenta creada correctamente. Ahora puedes iniciar sesión.');
+        window.location.href = 'login.html';
+    });
 });

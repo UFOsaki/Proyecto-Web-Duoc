@@ -1,27 +1,40 @@
 import { loadUsersDataFromLocalStorage } from './storageHelper.js';
 
-const handleLogin = (event) => {
-    event.preventDefault();
-    
-    const input = document.getElementById('username').value; 
-    const password = document.getElementById('password').value;
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('login-form');
 
-    console.log('Ingresado:', { input, password });
+    if (!loginForm) {
+        console.error('No se encontró el formulario con id="login-form"');
+        return;
+    }
 
-    const usersData = loadUsersDataFromLocalStorage();
-    console.log('Usuarios almacenados:', usersData);
+    loginForm.addEventListener('submit', (event) => {
+        event.preventDefault();
 
-    const user = usersData.find(user => (user.username === input || user.email === input) && user.password === password);
+        const input = document.getElementById('username').value.trim().toLowerCase();
+        const password = document.getElementById('password').value;
 
-    if (user) {
-        alert('Login exitoso!');
+        if (!input || !password) {
+            alert('Debes ingresar usuario/correo y contraseña.');
+            return;
+        }
+
+        const usersData = loadUsersDataFromLocalStorage();
+
+        const user = usersData.find(user =>
+            (user.username.toLowerCase() === input || user.email === input) &&
+            user.password === password
+        );
+
+        if (!user) {
+            alert('Correo, usuario o contraseña incorrectos.');
+            return;
+        }
+
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('loggedInUser', JSON.stringify(user));
-        window.location.href = 'index.html'; 
-    } else {
-        alert('Username, email o password incorrectos.');
-    }
-};
 
-// Agregar evento de escucha al formulario de login
-document.getElementById('login-form').addEventListener('submit', handleLogin);
+        alert(`Bienvenido, ${user.username}`);
+        window.location.href = 'index.html';
+    });
+});

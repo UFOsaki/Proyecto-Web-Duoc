@@ -1,20 +1,10 @@
-// Guardar datos en localStorage
-export const saveUsersDataToLocalStorage = (usersData) => {
-    localStorage.setItem('usersData', JSON.stringify(usersData));
-};
+const USERS_STORAGE_KEY = 'usersData';
 
-// Cargar datos desde localStorage
-export const loadUsersDataFromLocalStorage = () => {
-    const storedUsersData = localStorage.getItem('usersData');
-    return storedUsersData ? JSON.parse(storedUsersData) : [];
-};
+export function loadUsersDataFromLocalStorage() {
+  const usersData = localStorage.getItem(USERS_STORAGE_KEY);
+  return usersData ? JSON.parse(usersData) : [];
+}
 
-// Borrar todos los datos de localStorage
-export const clearLocalStorage = () => {
-    localStorage.clear();
-};
-
-// Borrar un ítem específico de localStorage
-export const removeUsersDataFromLocalStorage = () => {
-    localStorage.removeItem('usersData');
-};
+export function saveUsersDataToLocalStorage(usersData) {
+  localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(usersData));
+}

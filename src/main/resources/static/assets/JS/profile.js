@@ -1,45 +1,69 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    //cambio de  la foto de perfil 
-    const profilePicInput = document.getElementById('profile-pic-input');
-    const profileImgPreview = document.getElementById('profile-img-preview');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    if (profilePicInput && profileImgPreview) {
-        profilePicInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profileImgPreview.src = e.target.result; //cambio de imagen 
-                }
-                reader.readAsDataURL(file);
-            }
-        });
+    if (!isLoggedIn || !loggedInUser) {
+        alert('Debes iniciar sesión para ver tu perfil.');
+        window.location.href = 'login.html';
+        return;
     }
 
-    // guardado de cambios en el perfil  
+    const nameInput = document.getElementById('profile-name');
+    const emailInput = document.getElementById('profile-email');
+    const phoneInput = document.getElementById('profile-phone');
     const saveProfileBtn = document.getElementById('save-profile');
+    const logoutButton = document.getElementById('logout-button');
+
+    if (nameInput) nameInput.value = loggedInUser.username || '';
+    if (emailInput) emailInput.value = loggedInUser.email || '';
+    if (phoneInput) phoneInput.value = loggedInUser.phone || '';
+
     if (saveProfileBtn) {
         saveProfileBtn.addEventListener('click', () => {
-            const newName = document.getElementById('profile-name').value;
-            const newEmail = document.getElementById('profile-email').value;
-            const newPhone = document.getElementById('profile-phone').value;
+            const newName = nameInput.value.trim();
+            const newEmail = emailInput.value.trim().toLowerCase();
+            const newPhone = phoneInput.value.trim();
 
-            if(newName.trim() !== "" && newEmail.trim() !== "") {
-                alert(`Perfil actualizado:\nNombre: ${newName}\nCorreo: ${newEmail}\nTeléfono: ${newPhone}`);
-                // se guardarán los datos en el LocalStorage 
-            } else {
-                alert('Por favor, ingresa al menos un nombre de usuario y correo.');
+            if (!newName || !newEmail) {
+                alert('El nombre y correo son obligatorios.');
+                return;
             }
+
+            const usersData = JSON.parse(localStorage.getItem('usersData')) || [];
+
+            const updatedUsers = usersData.map(user => {
+                if (user.id === loggedInUser.id) {
+                    return {
+                        ...user,
+                        username: newName,
+                        email: newEmail,
+                        phone: newPhone
+                    };
+                }
+
+                return user;
+            });
+
+            const updatedLoggedUser = {
+                ...loggedInUser,
+                username: newName,
+                email: newEmail,
+                phone: newPhone
+            };
+
+            localStorage.setItem('usersData', JSON.stringify(updatedUsers));
+            localStorage.setItem('loggedInUser', JSON.stringify(updatedLoggedUser));
+
+            alert('Perfil actualizado correctamente.');
         });
     }
 
-    // cerrar sesión
-    const logoutButton = document.getElementById('logout-button');
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('loggedInUser');
+
+            alert('Sesión cerrada correctamente.');
             window.location.href = 'index.html';
         });
     }
