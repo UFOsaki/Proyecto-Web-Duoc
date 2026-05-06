@@ -21,7 +21,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // ──────────────────────────────────────────
     const cartItemsContainer = document.getElementById('cart-items');
     const cartTotalElement = document.getElementById('cart-total');
+<<<<<<< HEAD:assets/JS/cart.js
     const PAYMENT_API_BASE_URL = 'https://ms-sharingan-comics-pay-mercado-pago.onrender.com/';
+=======
+>>>>>>> c86be857d410e8e8a98b764d29e24e964c0efbeb:src/main/resources/static/assets/JS/cart.js
 
     // ──────────────────────────────────────────
     // HELPERS
@@ -149,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             cart.push({
                 id: manga.id,
+<<<<<<< HEAD:assets/JS/cart.js
                 productCode: manga.productCode,
                 title: manga.title,
                 unitPrice: manga.unitPrice,
@@ -157,6 +161,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 currency: manga.currency,
                 imageUrl: manga.imageUrl,
                 description: manga.description
+=======
+                title: manga.title,
+                price: manga.price,
+                quantity: 1
+>>>>>>> c86be857d410e8e8a98b764d29e24e964c0efbeb:src/main/resources/static/assets/JS/cart.js
             });
         }
 
@@ -212,7 +221,10 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     document.getElementById('add-to-cart-button').addEventListener('click', function () {
         const mangaId = this.getAttribute('data-id');
+<<<<<<< HEAD:assets/JS/cart.js
         const mangaProductCode = this.getAttribute('data-partnumber');
+=======
+>>>>>>> c86be857d410e8e8a98b764d29e24e964c0efbeb:src/main/resources/static/assets/JS/cart.js
         const mangaTitle = this.getAttribute('data-title');
         const mangaPrice = parseInt(this.getAttribute('data-price'), 10);
         const mangaCurrency = this.getAttribute('data-currency') || 'CLP';
@@ -226,7 +238,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         addToCart({
             id: mangaId,
+<<<<<<< HEAD:assets/JS/cart.js
             productCode: mangaProductCode,
+=======
+>>>>>>> c86be857d410e8e8a98b764d29e24e964c0efbeb:src/main/resources/static/assets/JS/cart.js
             title: mangaTitle,
             unitPrice: mangaPrice,
             currency: mangaCurrency,
@@ -240,6 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+<<<<<<< HEAD:assets/JS/cart.js
     // Checkout
     document.getElementById('checkout-button').addEventListener('click', function () {
         try {
@@ -255,6 +271,83 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             console.error('Error al preparar el checkout:', error);
             alert(error.message);
+=======
+    // ──────────────────────────────────────────
+    // CHECKOUT CON MERCADO PAGO
+    // ──────────────────────────────────────────
+
+    const API_MERCADO_PAGO_URL = 'https://ms-sharingan-comics-pay-mercado-pago.onrender.com/api/mercadopago/preferences';
+
+    document.getElementById('checkout-button').addEventListener('click', async function () {
+        const checkoutButton = this;
+        const cart = getCart();
+
+        if (!cart || cart.length === 0) {
+            alert('Tu carrito está vacío.');
+            return;
+        }
+
+        const buyerEmail = prompt('Ingresa el correo de la cuenta compradora de prueba de Mercado Pago:');
+
+        if (!buyerEmail || !buyerEmail.includes('@')) {
+            alert('Debes ingresar un correo válido para continuar.');
+            return;
+        }
+
+        const requestBody = {
+            buyerEmail: buyerEmail.trim(),
+            items: cart.map(item => ({
+                productCode: String(item.id),
+                title: String(item.title),
+                description: 'Compra desde Sharingan Comics',
+                quantity: Number(item.quantity),
+                unitPrice: Number(item.price)
+            }))
+        };
+
+        try {
+            checkoutButton.disabled = true;
+            checkoutButton.textContent = 'Redirigiendo a Mercado Pago...';
+
+            const response = await fetch(API_MERCADO_PAGO_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error('Error desde backend Mercado Pago:', data);
+                alert(data.detalle || data.error || 'No se pudo crear la preferencia de pago.');
+                return;
+            }
+
+            const checkoutUrl = data.sandboxInitPoint || data.initPoint;
+
+            if (!checkoutUrl) {
+                console.error('Respuesta sin URL de checkout:', data);
+                alert('Mercado Pago no devolvió una URL de pago.');
+                return;
+            }
+
+            localStorage.setItem('ultima_preferencia_mp', JSON.stringify({
+                preferenceId: data.preferenceId,
+                externalReference: data.externalReference,
+                fecha: new Date().toISOString()
+            }));
+
+            window.location.href = checkoutUrl;
+
+        } catch (error) {
+            console.error('Error conectando con Mercado Pago:', error);
+            alert('No se pudo conectar con el servicio de pago. Intenta nuevamente.');
+        } finally {
+            checkoutButton.disabled = false;
+            checkoutButton.textContent = 'Finalizar compra';
+>>>>>>> c86be857d410e8e8a98b764d29e24e964c0efbeb:src/main/resources/static/assets/JS/cart.js
         }
     });
 

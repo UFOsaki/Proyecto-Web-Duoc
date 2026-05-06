@@ -1,0 +1,55 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Oracle Wallet — NO subir credenciales ni certificados ###
+wallet/
+Wallet/
+*.p12
+*.sso
+*.ora
+cwallet.sso
+ewallet.p12
+tnsnames.ora
+sqlnet.ora
+keystore.jks
+*.jks
+
+### Variables de entorno sensibles ###
+.env
+.env.local
+.env.production
+
+### Credenciales de base de datos — NO subir al repositorio ###
+# Usa application.properties.example como plantilla sin datos reales
+src/main/resources/application.properties

@@ -1,0 +1,40 @@
+# ==========================================
+# Sharingan Comics — Application Properties (PLANTILLA)
+# ==========================================
+# Copia este archivo como application.properties y completa los valores.
+# Este archivo SÍ se sube al repositorio (sin credenciales reales).
+# application.properties está en .gitignore para proteger las credenciales.
+
+spring.application.name=sharingan-comics
+server.port=8080
+
+# ==========================================
+# Oracle Autonomous Database — Wallet Config
+# ==========================================
+# Wallet en: C:/Workspace/oracle-wallet/  (FUERA del repo)
+# Servicio recomendado para desarrollo: sharingan_low
+# Servicio recomendado para producción:  sharingan_medium
+
+spring.datasource.url=jdbc:oracle:thin:@sharingan_medium?TNS_ADMIN=C:/Workspace/oracle-wallet
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.datasource.username=ADMIN
+spring.datasource.password=TU_PASSWORD_AQUI
+
+# HikariCP
+spring.datasource.hikari.connection-timeout=30000
+spring.datasource.hikari.maximum-pool-size=5
+spring.datasource.hikari.minimum-idle=1
+spring.datasource.hikari.initialization-fail-timeout=-1
+
+# ==========================================
+# JPA / Hibernate
+# ==========================================
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.open-in-view=false
+
+# ==========================================
+# Recursos estáticos
+# ==========================================
+spring.web.resources.static-locations=classpath:/static/

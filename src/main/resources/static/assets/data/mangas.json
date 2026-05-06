@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "title": "Naruto",
+    "genre": ["Acción", "Aventura"],
+    "url": "/assets/img/naruto.jpg"
+  },
+  {
+    "id": 2,
+    "title": "One Piece",
+    "genre": ["Aventura", "Shonen"],
+    "url": "/assets/img/onepiece.jpg"
+  }
+]
