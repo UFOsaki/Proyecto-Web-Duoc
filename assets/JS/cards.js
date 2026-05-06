@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // ──────────────────────────────────────────
     // CONSTANTES
     // ──────────────────────────────────────────
-    const API_BASE_URL      = 'https://api-rest-manga.onrender.com';
-    const cardsContainer    = document.getElementById('cards-container');
+    const API_BASE_URL = 'https://api-rest-manga.onrender.com';
+    const cardsContainer = document.getElementById('cards-container');
 
     // ──────────────────────────────────────────
     // FUNCIONES AUXILIARES DE FORMATO
@@ -84,9 +84,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const wrapper = document.createElement('div');
         wrapper.className = 'col-6 col-sm-6 col-md-4 col-lg-3 mb-4';
 
-        const title  = capitalizeTitle(manga.title);
-        const genre  = formatGenre(manga.genre);
-        const price  = formatPrice(manga.price);
+        const title = capitalizeTitle(manga.title);
+        const genre = formatGenre(manga.genre);
+        const price = formatPrice(manga.price);
+        const stock = manga.stock;
+        const partNumber = manga.partNumber;
 
         wrapper.innerHTML = `
             <div class="card h-100">
@@ -99,14 +101,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 >
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${title}</h5>
-                    <p class="card-text text-muted mb-1"><small>${genre}</small></p>
-                    <p class="card-text fw-bold mt-auto mb-2">$${price}</p>
-                    <a href="#"
-                       class="btn btn-primary details-button"
-                       data-id="${manga.id}"
-                       aria-label="Ver detalles de ${title}">
-                        Ver más detalles
-                    </a>
+                    <p class="card-text fw-bold mt-auto mb-1">$${price}</p>
+
+<p class="card-text mb-1">
+    <small class="text-muted">Código: ${partNumber}</small>
+</p>
+
+<p class="card-text mb-2">
+    <small class="${stock > 0 ? 'text-success' : 'text-danger'}">
+        ${stock > 0 ? `Stock disponible: ${stock}` : 'Sin stock'}
+    </small>
+</p>
+
+<a href="#"
+   class="btn btn-primary details-button"
+   data-id="${manga.id}"
+   data-partnumber="${partNumber}"
+   data-price="${manga.price}"
+   data-stock="${stock}"
+   aria-label="Ver detalles de ${title}">
+    Ver más detalles
+</a>
                 </div>
             </div>
         `;
@@ -171,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
             apiMangas.forEach(apiManga => {
                 // Mezcla de datos API + configuración local por manga.id
                 const manga = buildMangaItem(apiManga, API_BASE_URL);
-                const card  = createCard(manga);
+                const card = createCard(manga);
                 cardsContainer.appendChild(card);
             });
 
@@ -203,18 +218,26 @@ document.addEventListener('DOMContentLoaded', function () {
             // Enriquecer con datos locales (mismo precio que aparece en la card)
             const manga = buildMangaItem(apiManga, API_BASE_URL);
 
-            document.getElementById('modal-title').textContent    = capitalizeTitle(manga.title);
-            document.getElementById('modal-genres').textContent   = `Géneros: ${formatGenre(manga.genre)}`;
+            document.getElementById('modal-title').textContent = capitalizeTitle(manga.title);
+            document.getElementById('modal-genres').textContent = `Géneros: ${formatGenre(manga.genre)}`;
             document.getElementById('modal-synopsis').textContent = manga.synopsis;
-            document.getElementById('modal-price').textContent    = formatPrice(manga.price);
-            document.getElementById('modal-image').src            = manga.imageUrl;
-            document.getElementById('modal-image').alt            = `Portada de ${capitalizeTitle(manga.title)}`;
+            document.getElementById('modal-price').textContent = formatPrice(manga.price);
+            document.getElementById('modal-image').src = manga.imageUrl;
+            document.getElementById('modal-image').alt = `Portada de ${capitalizeTitle(manga.title)}`;
 
-            // Guardamos el precio fijo en el botón para que cart.js lo lea sin hacer otra llamada
+            // Guardamos los datos del producto en el botón para que cart.js los lea sin hacer otra llamada
             const addBtn = document.getElementById('add-to-cart-button');
-            addBtn.setAttribute('data-id',    manga.id);
-            addBtn.setAttribute('data-title', manga.title);
-            addBtn.setAttribute('data-price', manga.price);
+
+            if (addBtn) {
+                addBtn.setAttribute('data-id', manga.id);
+                addBtn.setAttribute('data-partnumber', manga.partNumber);
+                addBtn.setAttribute('data-title', manga.title);
+                addBtn.setAttribute('data-price', manga.price);
+                addBtn.setAttribute('data-currency', manga.currency);
+                addBtn.setAttribute('data-stock', manga.stock);
+                addBtn.setAttribute('data-image', manga.imageUrl);
+                addBtn.setAttribute('data-description', manga.description || manga.synopsis);
+            }
 
             const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
             detailsModal.show();

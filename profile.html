@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,32 +9,32 @@
     <link rel="stylesheet" href="assets/css/login.css">
     <link rel="stylesheet" href="assets/css/profile.css">
 </head>
+
 <body>
     <div class="container">
-        <a href="index.html" class="back-link">Volver</a>
-        
+
         <h2 class="form-title">Perfil</h2>
         <div class="profile-header">
-            <img src="assets/img/icono3.png" alt="Foto de perfil" class="profile-pic" id="profile-img-preview">
+            <img src="assets/img/1.2.jpg" alt="Foto de perfil" class="profile-pic" id="profile-img-preview">
             <br>
-            <div class="file-upload-wrapper btn btn-outline-secondary btn-sm"> 
+            <div class="file-upload-wrapper btn btn-outline-secondary btn-sm">
                 <span> Cambiar foto de perfil</span>
                 <input type="file" id="profile-pic-input" accept="image/*">
             </div>
         </div>
         <form id="profile-form">
             <div class="mb-3">
-                <label for="profile-name" class="form-label">Nombre de Usuario</label> 
+                <label for="profile-name" class="form-label">Nombre de Usuario</label>
                 <input type="text" id="profile-name" class="form-control" placeholder="Tu nombre de usuario">
             </div>
-            
+
             <div class="mb-3">
-                <label for="profile-email" class="form-label">Correo Electrónico</label> 
+                <label for="profile-email" class="form-label">Correo Electrónico</label>
                 <input type="email" id="profile-email" class="form-control" placeholder="tu_correo@ejemplo.com">
             </div>
 
             <div class="mb-3">
-                <label for="profile-phone" class="form-label">Número de Teléfono</label> 
+                <label for="profile-phone" class="form-label">Número de Teléfono</label>
                 <input type="tel" id="profile-phone" class="form-control" placeholder="+56 9 1234 5678">
             </div>
 
@@ -41,9 +42,12 @@
                 <button type="button" id="save-profile" class="btn btn-primary">Guardar cambios</button>
             </div>
         </form>
-
+        <a href="index.html" id="exit-index" class="btn btn-primary">
+            Volver
+        </a>
         <button id="logout-button" class="btn btn-primary">Cerrar sesión</button>
     </div>
     <script type="module" src="assets/js/profile.js"></script>
 </body>
+
 </html>

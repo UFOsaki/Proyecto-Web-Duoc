@@ -1,31 +1,54 @@
-import { showStep, nextStep, prevStep, finalizeRegistration } from './formHelper.js';
+console.log("signup.js cargado correctamente");
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
+    const signupForm = document.getElementById('signup-form');
 
-    // Botones de avance
-    const btnNext1 = document.getElementById("next-step-1");
-    const btnNext2 = document.getElementById("next-step-2");
-    const btnNext3 = document.getElementById("next-step-3");
+    signupForm.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    // Botones de retroceso
-    const btnPrev2 = document.getElementById("prev-step-2");
-    const btnPrev3 = document.getElementById("prev-step-3");
-    const btnPrev4 = document.getElementById("prev-step-4");
+        console.log("Formulario de registro enviado");
+        
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const confirmPassword = document.getElementById('confirm-password').value.trim();
 
-    // Asignar eventos solo si el elemento existe en el HTML
-    if (btnNext1) btnNext1.addEventListener("click", nextStep);
-    if (btnNext2) btnNext2.addEventListener("click", nextStep);
-    if (btnNext3) btnNext3.addEventListener("click", nextStep);
-    if (btnPrev2) btnPrev2.addEventListener("click", prevStep);
-    if (btnPrev3) btnPrev3.addEventListener("click", prevStep);
-    if (btnPrev4) btnPrev4.addEventListener("click", prevStep);
+        if (!username || !email || !password || !confirmPassword) {
+            alert('Debes completar todos los campos.');
+            return;
+        }
 
-    // Submit final
-    const form = document.getElementById("signup-form");
-    if (form) {
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            finalizeRegistration();
-        });
-    }
+        if (password !== confirmPassword) {
+            alert('Las contraseñas no coinciden.');
+            return;
+        }
+
+        const usersData = JSON.parse(localStorage.getItem('usersData')) || [];
+
+        const emailExists = usersData.some(user => user.email === email);
+
+        if (emailExists) {
+            alert('Ya existe una cuenta registrada con este correo.');
+            return;
+        }
+
+        const newUser = {
+            id: Date.now(),
+            username: username,
+            email: email,
+            password: password,
+            phone: '',
+            profileImage: 'assets/img/logo.png',
+            createdAt: new Date().toISOString()
+        };
+
+        usersData.push(newUser);
+
+        localStorage.setItem('usersData', JSON.stringify(usersData));
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+
+        alert('Cuenta creada correctamente.');
+        window.location.href = 'profile.html';
+    });
 });

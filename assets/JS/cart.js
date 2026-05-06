@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // CONSTANTES
     // ──────────────────────────────────────────
     const cartItemsContainer = document.getElementById('cart-items');
-    const cartTotalElement   = document.getElementById('cart-total');
+    const cartTotalElement = document.getElementById('cart-total');
 
     // ──────────────────────────────────────────
     // HELPERS
@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         cart.forEach((item, index) => {
-            const subtotal  = item.price * item.quantity;
-            total          += subtotal;
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
 
             const listItem = document.createElement('li');
             listItem.className = 'list-group-item';
@@ -114,16 +114,21 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function addToCart(manga) {
         const cart = getCart();
-        const existingIndex = cart.findIndex(item => item.id === manga.id);
+        const existingIndex = cart.findIndex(item => item.productCode === manga.productCode);
 
         if (existingIndex !== -1) {
             cart[existingIndex].quantity += 1;
         } else {
             cart.push({
-                id:       manga.id,
-                title:    manga.title,
-                price:    manga.price,
-                quantity: 1
+                id: manga.id,
+                productCode: manga.productCode,
+                title: manga.title,
+                unitPrice: manga.unitPrice,
+                price: manga.unitPrice, // compatibilidad temporal con tu render actual
+                quantity: 1,
+                currency: manga.currency,
+                imageUrl: manga.imageUrl,
+                description: manga.description
             });
         }
 
@@ -154,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Incrementar / decrementar desde el carrito
     cartItemsContainer.addEventListener('click', function (e) {
-        const btn   = e.target.closest('button');
+        const btn = e.target.closest('button');
         if (!btn) return;
         const index = parseInt(btn.getAttribute('data-index'), 10);
 
@@ -178,19 +183,27 @@ document.addEventListener('DOMContentLoaded', function () {
      * en la card y en el modal (proveniente de catalogConfig.js).
      */
     document.getElementById('add-to-cart-button').addEventListener('click', function () {
-        const mangaId    = this.getAttribute('data-id');
+        const mangaId = this.getAttribute('data-id');
+        const mangaProductCode = this.getAttribute('data-partnumber');
         const mangaTitle = this.getAttribute('data-title');
         const mangaPrice = parseInt(this.getAttribute('data-price'), 10);
+        const mangaCurrency = this.getAttribute('data-currency') || 'CLP';
+        const mangaImage = this.getAttribute('data-image');
+        const mangaDescription = this.getAttribute('data-description');
 
-        if (!mangaId || isNaN(mangaPrice)) {
-            console.error('cart.js: data-id o data-price no disponibles en el botón del modal.');
+        if (!mangaId || !mangaProductCode || !mangaTitle || isNaN(mangaPrice) || mangaPrice <= 0) {
+            console.error('cart.js: faltan datos obligatorios para agregar el producto al carrito.');
             return;
         }
 
         addToCart({
-            id:    mangaId,
+            id: mangaId,
+            productCode: mangaProductCode,
             title: mangaTitle,
-            price: mangaPrice
+            unitPrice: mangaPrice,
+            currency: mangaCurrency,
+            imageUrl: mangaImage,
+            description: mangaDescription
         });
 
         const detailsModal = bootstrap.Modal.getInstance(document.getElementById('detailsModal'));
