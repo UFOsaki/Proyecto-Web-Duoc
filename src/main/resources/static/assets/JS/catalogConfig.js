@@ -101,7 +101,7 @@ function buildMangaItem(apiManga, baseUrl) {
     // al mismo origen (localhost:8080) en lugar de al dominio externo.
     const imageUrl = apiManga.url
         ? `/api/images?path=${encodeURIComponent(apiManga.url)}`
-        : 'https://via.placeholder.com/300x420?text=Sin+imagen';
+        : 'https://api-rest-manga.onrender.com/';
 
     return {
         id:       apiManga.id,

@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // CONSTANTES
     // ──────────────────────────────────────────
     const cartItemsContainer = document.getElementById('cart-items');
-    const cartTotalElement   = document.getElementById('cart-total');
+    const cartTotalElement = document.getElementById('cart-total');
 
     // ──────────────────────────────────────────
     // HELPERS
@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         cart.forEach((item, index) => {
-            const subtotal  = item.price * item.quantity;
-            total          += subtotal;
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
 
             const listItem = document.createElement('li');
             listItem.className = 'list-group-item';
@@ -120,9 +120,9 @@ document.addEventListener('DOMContentLoaded', function () {
             cart[existingIndex].quantity += 1;
         } else {
             cart.push({
-                id:       manga.id,
-                title:    manga.title,
-                price:    manga.price,
+                id: manga.id,
+                title: manga.title,
+                price: manga.price,
                 quantity: 1
             });
         }
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Incrementar / decrementar desde el carrito
     cartItemsContainer.addEventListener('click', function (e) {
-        const btn   = e.target.closest('button');
+        const btn = e.target.closest('button');
         if (!btn) return;
         const index = parseInt(btn.getAttribute('data-index'), 10);
 
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
      * en la card y en el modal (proveniente de catalogConfig.js).
      */
     document.getElementById('add-to-cart-button').addEventListener('click', function () {
-        const mangaId    = this.getAttribute('data-id');
+        const mangaId = this.getAttribute('data-id');
         const mangaTitle = this.getAttribute('data-title');
         const mangaPrice = parseInt(this.getAttribute('data-price'), 10);
 
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         addToCart({
-            id:    mangaId,
+            id: mangaId,
             title: mangaTitle,
             price: mangaPrice
         });
@@ -199,11 +199,82 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Checkout
-    document.getElementById('checkout-button').addEventListener('click', function () {
-        alert('¡Compra realizada con éxito! Gracias por tu pedido.');
-        localStorage.removeItem('cart');
-        loadCart();
+    // ──────────────────────────────────────────
+    // CHECKOUT CON MERCADO PAGO
+    // ──────────────────────────────────────────
+
+    const API_MERCADO_PAGO_URL = 'https://ms-sharingan-comics-pay-mercado-pago.onrender.com/api/mercadopago/preferences';
+
+    document.getElementById('checkout-button').addEventListener('click', async function () {
+        const checkoutButton = this;
+        const cart = getCart();
+
+        if (!cart || cart.length === 0) {
+            alert('Tu carrito está vacío.');
+            return;
+        }
+
+        const buyerEmail = prompt('Ingresa el correo de la cuenta compradora de prueba de Mercado Pago:');
+
+        if (!buyerEmail || !buyerEmail.includes('@')) {
+            alert('Debes ingresar un correo válido para continuar.');
+            return;
+        }
+
+        const requestBody = {
+            buyerEmail: buyerEmail.trim(),
+            items: cart.map(item => ({
+                productCode: String(item.id),
+                title: String(item.title),
+                description: 'Compra desde Sharingan Comics',
+                quantity: Number(item.quantity),
+                unitPrice: Number(item.price)
+            }))
+        };
+
+        try {
+            checkoutButton.disabled = true;
+            checkoutButton.textContent = 'Redirigiendo a Mercado Pago...';
+
+            const response = await fetch(API_MERCADO_PAGO_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error('Error desde backend Mercado Pago:', data);
+                alert(data.detalle || data.error || 'No se pudo crear la preferencia de pago.');
+                return;
+            }
+
+            const checkoutUrl = data.sandboxInitPoint || data.initPoint;
+
+            if (!checkoutUrl) {
+                console.error('Respuesta sin URL de checkout:', data);
+                alert('Mercado Pago no devolvió una URL de pago.');
+                return;
+            }
+
+            localStorage.setItem('ultima_preferencia_mp', JSON.stringify({
+                preferenceId: data.preferenceId,
+                externalReference: data.externalReference,
+                fecha: new Date().toISOString()
+            }));
+
+            window.location.href = checkoutUrl;
+
+        } catch (error) {
+            console.error('Error conectando con Mercado Pago:', error);
+            alert('No se pudo conectar con el servicio de pago. Intenta nuevamente.');
+        } finally {
+            checkoutButton.disabled = false;
+            checkoutButton.textContent = 'Finalizar compra';
+        }
     });
 
     // ──────────────────────────────────────────
