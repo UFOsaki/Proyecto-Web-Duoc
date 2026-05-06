@@ -18,8 +18,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // ──────────────────────────────────────────
     // CONSTANTES
     // ──────────────────────────────────────────
-    const API_BASE_URL      = 'https://api-rest-manga.onrender.com';
-    const cardsContainer    = document.getElementById('cards-container');
+    // URL del proxy local de Spring Boot que reenvía las peticiones a la API externa.
+    // Usar el mismo origen evita errores CORS por completo.
+    const API_BASE_URL   = '/api/mangas';
+    const cardsContainer = document.getElementById('cards-container');
 
     // ──────────────────────────────────────────
     // FUNCIONES AUXILIARES DE FORMATO
@@ -152,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
         showLoadingState();
 
         try {
-            const response = await fetch(`${API_BASE_URL}/images`);
+            const response = await fetch(`${API_BASE_URL}`);
 
             if (!response.ok) {
                 throw new Error(`La API respondió con estado ${response.status}`);
@@ -192,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     async function showDetailsModal(mangaId) {
         try {
-            const response = await fetch(`${API_BASE_URL}/images/${mangaId}`);
+            const response = await fetch(`${API_BASE_URL}/${mangaId}`);
 
             if (!response.ok) {
                 throw new Error(`La API respondió con estado ${response.status}`);

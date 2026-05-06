@@ -95,11 +95,19 @@ function getMangaConfig(mangaId) {
  */
 function buildMangaItem(apiManga, baseUrl) {
     const config = getMangaConfig(apiManga.id);
+
+    // Las imágenes se sirven a través del proxy local de Spring Boot.
+    // Esto evita errores CORS ya que el navegador hace la petición
+    // al mismo origen (localhost:8080) en lugar de al dominio externo.
+    const imageUrl = apiManga.url
+        ? `/api/images?path=${encodeURIComponent(apiManga.url)}`
+        : 'https://via.placeholder.com/300x420?text=Sin+imagen';
+
     return {
         id:       apiManga.id,
         title:    apiManga.title,
         genre:    apiManga.genre,
-        imageUrl: apiManga.url ? `${baseUrl}${apiManga.url}` : 'https://via.placeholder.com/300x420?text=Sin+imagen',
+        imageUrl: imageUrl,
         price:    config.price,
         synopsis: config.synopsis,
         stock:    config.stock
