@@ -18,13 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ──────────────────────────────────────────
     // CONSTANTES
     // ──────────────────────────────────────────
-<<<<<<< HEAD:assets/JS/cards.js
     const API_BASE_URL = 'https://api-rest-manga.onrender.com';
-=======
-    // URL del proxy local de Spring Boot que reenvía las peticiones a la API externa.
-    // Usar el mismo origen evita errores CORS por completo.
-    const API_BASE_URL   = '/api/mangas';
->>>>>>> c86be857d410e8e8a98b764d29e24e964c0efbeb:src/main/resources/static/assets/JS/cards.js
     const cardsContainer = document.getElementById('cards-container');
 
     // ──────────────────────────────────────────
@@ -173,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
         showLoadingState();
 
         try {
-            const response = await fetch(`${API_BASE_URL}`);
+            const response = await fetch(`${API_BASE_URL}/images`);
 
             if (!response.ok) {
                 throw new Error(`La API respondió con estado ${response.status}`);
@@ -195,15 +189,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const card = createCard(manga);
                 cardsContainer.appendChild(card);
             });
-
         } catch (error) {
             console.error('Error al cargar el catálogo desde la API:', error);
-            cardsContainer.innerHTML = `
-            <div class="alert alert-warning text-center">
-            No se pudo cargar la API externa. Se recomienda usar respaldo local o verificar el servicio en Render.
-            </div>
-  `;    
-}
+            showError('No se pudo cargar el catálogo. Verifica tu conexión a internet.');
+        }
+    }
 
     // ──────────────────────────────────────────
     // MODAL DE DETALLE
@@ -216,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     async function showDetailsModal(mangaId) {
         try {
-            const response = await fetch(`${API_BASE_URL}/${mangaId}`);
+            const response = await fetch(`${API_BASE_URL}/images/${mangaId}`);
 
             if (!response.ok) {
                 throw new Error(`La API respondió con estado ${response.status}`);
@@ -274,6 +264,5 @@ document.addEventListener('DOMContentLoaded', function () {
     // ──────────────────────────────────────────
     // INICIALIZACIÓN
     // ──────────────────────────────────────────
-    loadMangas()
-};
-})
+    loadMangas();
+});
