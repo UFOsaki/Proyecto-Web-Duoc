@@ -241,20 +241,56 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Checkout
-    document.getElementById('checkout-button').addEventListener('click', function () {
+    document.getElementById('checkout-button').addEventListener('click', async function () {
         try {
             const checkoutPayload = buildCheckoutPayload();
+            const authToken = localStorage.getItem('authToken');
 
-            console.log('Payload preparado para Mercado Pago:', checkoutPayload);
+            if (!authToken) {
+                alert('Tu sesión ha expirado o no estás logueado. Por favor, inicia sesión.');
+                window.location.href = 'login.html';
+                return;
+            }
 
-            alert('Payload de pago generado correctamente. Revisa la consola.');
+            console.log('Enviando payload a Backend Spring Boot:', checkoutPayload);
+            const checkoutBtn = document.getElementById('checkout-button');
+            const originalText = checkoutBtn.textContent;
+            checkoutBtn.textContent = 'Procesando...';
+            checkoutBtn.disabled = true;
 
-            // Más adelante aquí haremos el fetch al backend Spring Boot.
-            // Por ahora NO limpiamos el carrito todavía.
+            const response = await fetch(`${APP_CONFIG.PAYMENT_API_BASE_URL}/api/payments/create-preference`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: JSON.stringify(checkoutPayload)
+            });
+
+            if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error('Sesión inválida. Por favor inicia sesión nuevamente.');
+                }
+                const errorText = await response.text();
+                throw new Error(`Error en el servidor: ${errorText}`);
+            }
+
+            const paymentResponse = await response.json();
+            console.log('Respuesta Mercado Pago:', paymentResponse);
+
+            // Redirigir a Mercado Pago
+            if (paymentResponse.initPoint) {
+                window.location.href = paymentResponse.initPoint;
+            } else {
+                throw new Error('No se recibió la URL de pago de Mercado Pago.');
+            }
 
         } catch (error) {
             console.error('Error al preparar el checkout:', error);
             alert(error.message);
+            const checkoutBtn = document.getElementById('checkout-button');
+            checkoutBtn.textContent = 'Checkout';
+            checkoutBtn.disabled = false;
         }
     });
 

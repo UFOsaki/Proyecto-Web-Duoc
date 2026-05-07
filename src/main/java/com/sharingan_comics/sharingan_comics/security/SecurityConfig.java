@@ -30,12 +30,15 @@ public class SecurityConfig {
                 // Endpoints públicos
                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/logout").permitAll()
+                .requestMatchers("/api/payments/webhook/**").permitAll()
                 .requestMatchers("/api/mangas/**").permitAll()
                 .requestMatchers("/api/images/**").permitAll()
                 // Recursos estáticos
                 .requestMatchers("/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png",
                                  "/**/*.jpg", "/**/*.webp", "/**/*.ico").permitAll()
                 .requestMatchers("/", "/index.html").permitAll()
+                // Pagos
+                .requestMatchers("/api/payments/create-preference").authenticated()
                 // Todo lo demás requiere autenticación
                 .anyRequest().authenticated()
             )

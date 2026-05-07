@@ -34,3 +34,12 @@ app:
   jwt:
     secret: ${JWT_SECRET:sharingan-comics-dev-secret-key-change-in-production-min-256-bits-long}
     expiration-ms: 86400000  # 24 horas
+
+# Mercado Pago Configuration
+mercadopago:
+  access-token: ${MERCADOPAGO_ACCESS_TOKEN:}
+  success-url: ${MP_SUCCESS_URL:http://localhost:8080/payment-success.html}
+  failure-url: ${MP_FAILURE_URL:http://localhost:8080/payment-failure.html}
+  pending-url: ${MP_PENDING_URL:http://localhost:8080/payment-pending.html}
+  notification-url: ${MP_NOTIFICATION_URL:}
+

@@ -17,6 +17,6 @@ const APP_CONFIG = {
     // API externa de mangas (catálogo)
     MANGA_API_BASE_URL: 'https://api-rest-manga.onrender.com',
 
-    // Backend Mercado Pago
-    PAYMENT_API_BASE_URL: 'https://ms-sharingan-comics-pay-mercado-pago.onrender.com'
+    // Backend Mercado Pago (ahora unificado en Spring Boot local)
+    PAYMENT_API_BASE_URL: 'http://localhost:8080'
 };

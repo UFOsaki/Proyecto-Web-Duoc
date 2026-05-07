@@ -40,11 +40,21 @@ Proyecto-Web-Duoc/
 ### 1. Variables de entorno
 
 ```bash
+# Base de datos
 ORACLE_DB_USERNAME=ADMIN
 ORACLE_DB_PASSWORD=tu_contraseña_oracle
 TNS_ADMIN=C:/ruta/a/wallet/extraída
 ORACLE_DB_TNS_ALIAS=sharingan_medium
+
+# Seguridad
 JWT_SECRET=tu_clave_secreta_de_al_menos_256_bits
+
+# Mercado Pago
+MERCADOPAGO_ACCESS_TOKEN=TEST-xxxxxxxxxx
+MP_SUCCESS_URL=http://localhost:8080/payment-success.html
+MP_FAILURE_URL=http://localhost:8080/payment-failure.html
+MP_PENDING_URL=http://localhost:8080/payment-pending.html
+# MP_NOTIFICATION_URL=https://tu-ngrok.app/api/payments/webhook
 ```
 
 ### 2. Oracle Wallet

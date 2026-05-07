@@ -102,6 +102,13 @@
 			<version>0.12.6</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Mercado Pago SDK -->
+		<dependency>
+			<groupId>com.mercadopago</groupId>
+			<artifactId>sdk-java</artifactId>
+			<version>2.1.28</version> <!-- Using a known stable recent version -->
+		</dependency>
 	</dependencies>
 
 	<build>
