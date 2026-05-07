@@ -1,0 +1,148 @@
+/* ============================================
+   SHARINGAN COMICS — profile.css
+   Mobile First
+   ============================================ */
+
+/* ── Base móvil ── */
+body {
+  background-image: url('../img/fondo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: scroll;  /* fixed causa problemas en móvil */
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;   /* en móvil empieza desde arriba */
+  padding: 16px;
+}
+
+.container {
+  background-color: rgba(255,255,255,0.88);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  padding: 20px 16px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+/* ── Cabecera del perfil ── */
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-pic {
+  width: 100px;    /* más pequeño en móvil */
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #0dcaf0;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* ── Botón cambiar foto ── */
+.file-upload-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  font-size: 0.85rem;
+}
+
+.file-upload-wrapper input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ── Formulario ── */
+.form-title {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1d8dc5;
+  font-weight: bold;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.form-control {
+  font-size: 0.9rem;
+  padding: 10px;
+}
+
+.btn {
+  font-size: 0.9rem;
+  padding: 10px;
+}
+
+.back-link {
+  display: block;
+  margin-bottom: 12px;
+  color: #1d8dc5;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   SM >= 576px
+   ============================================ */
+@media (min-width: 576px) {
+  body {
+    align-items: center;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 420px;
+    padding: 24px 20px;
+    margin: 16px;
+  }
+
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+
+  .form-title  { font-size: 1.4rem; }
+  .form-label  { font-size: 0.95rem; }
+  .form-control{ font-size: 0.95rem; }
+}
+
+/* ============================================
+   MD >= 768px
+   ============================================ */
+@media (min-width: 768px) {
+  body {
+    background-attachment: fixed;  /* fixed solo en desktop */
+  }
+
+  .container {
+    max-width: 450px;
+    padding: 30px;
+  }
+
+  .profile-pic {
+    width: 150px;
+    height: 150px;
+    border-width: 4px;
+  }
+
+  .form-title { font-size: 1.5rem; }
+}
