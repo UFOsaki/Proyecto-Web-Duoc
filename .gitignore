@@ -33,7 +33,8 @@ build/
 .vscode/
 
 ### Oracle Wallet — NO subir credenciales ni certificados ###
-wallet/
+wallet/*
+!wallet/.gitkeep
 Wallet/
 *.p12
 *.sso
@@ -44,6 +45,7 @@ tnsnames.ora
 sqlnet.ora
 keystore.jks
 *.jks
+*.zip
 
 ### Variables de entorno sensibles ###
 .env
@@ -51,5 +53,5 @@ keystore.jks
 .env.production
 
 ### Credenciales de base de datos — NO subir al repositorio ###
-# Usa application.properties.example como plantilla sin datos reales
 src/main/resources/application.properties
+src/main/resources/application-local.yml
