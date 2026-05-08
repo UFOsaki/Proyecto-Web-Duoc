@@ -5,37 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DC</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
      <header>
-        <nav class="navbar navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
             <div class="container-fluid">
-                <a class="navbar-brand" href="./index.html">DC</a>
+                <a class="navbar-brand d-flex align-items-center" href="./index.html">
+                    <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+                    <span class="d-none d-lg-inline ms-2 navbar-brand-text">Sharingan Comics</span>
+                </a>
+                <form class="d-flex mx-3 flex-grow-1">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchInput">
+                </form>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="./index.html">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./marvel.html">Marvel</a>
-                        </li>
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="./mangas.html">Mangas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./Contacto.html">Contacto</a>
+                            <a class="nav-link" href="./DC.html">DC</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./Marvel.html">Marvel</a>
                         </li>
                     </ul>
+                    <!-- El botón del carrito se generará dinámicamente -->
                 </div>
             </div>
         </nav>
-        <div class="conteiner-fluid">
-        <img src="assets/img/cabeceracomic.jpg" class="banner" width="100%" height="300"alt="Cabezera comic">
-        </div>
     </header>
     <div class="row mt-4">
             <div class="col-md-3">
