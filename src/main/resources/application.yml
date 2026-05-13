@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: sharingan-comics
+
+  datasource:
+    url: jdbc:oracle:thin:@${ORACLE_DB_TNS_ALIAS:sharingan_medium}?TNS_ADMIN=${TNS_ADMIN:C:/Workspace/oracle-wallet}
+    username: ${ORACLE_DB_USERNAME:ADMIN}
+    password: ${ORACLE_DB_PASSWORD:}
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 5
+      minimum-idle: 1
+      initialization-fail-timeout: -1
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+server:
+  port: 8080
+
+# JWT Configuration
+app:
+  jwt:
+    secret: ${JWT_SECRET:sharingan-comics-dev-secret-key-change-in-production-min-256-bits-long}
+    expiration-ms: 86400000  # 24 horas

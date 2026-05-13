@@ -1,0 +1,82 @@
+/* ============================================
+   SHARINGAN COMICS — signUp.css
+   Mobile First
+   ============================================ */
+
+/* ── Logo — base móvil ── */
+img.navbar-logo {
+  height: 64px;
+  width: 80px;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  text-decoration: none;
+}
+
+.navbar-brand-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1d8dc5;
+  margin-left: 10px;
+  display: none;   /* oculto en móvil muy pequeño */
+}
+
+/* ── Formulario steps ── */
+.step {
+  width: 100%;
+}
+
+.step .form-label {
+  font-size: 0.9rem;
+}
+
+.step .form-control {
+  font-size: 0.9rem;
+  padding: 10px;
+}
+
+.step .btn {
+  width: 100%;
+  font-size: 0.95rem;
+  padding: 10px;
+  margin-top: 6px;
+}
+
+/* ============================================
+   SM >= 576px
+   ============================================ */
+@media (min-width: 576px) {
+  img.navbar-logo {
+    height: 72px;
+    width: 90px;
+  }
+
+  .navbar-brand-text {
+    display: inline;   /* visible desde tablet pequeña */
+    font-size: 1.4rem;
+  }
+
+  .step .form-label   { font-size: 0.95rem; }
+  .step .form-control { font-size: 0.95rem; }
+}
+
+/* ============================================
+   MD >= 768px
+   ============================================ */
+@media (min-width: 768px) {
+  img.navbar-logo {
+    height: 80px;
+    width: 100px;
+  }
+
+  .navbar-brand-text {
+    font-size: 1.6rem;
+  }
+}
