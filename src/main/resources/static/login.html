@@ -4,40 +4,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inicia sesión en Sharingan Comics. Login con cuenta propia, Google o autenticación de dos factores.">
     <title>Login | Sharingan Comics</title>
     <link rel="icon" href="assets/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/login.css">
+    <style>
+        /* ── Estilos mínimos para botones Clerk ── */
+        .btn-clerk {
+            background: #1a1a2e;
+            color: #fff;
+            border: 1px solid #6c47ff;
+            transition: background 0.2s;
+        }
+        .btn-clerk:hover {
+            background: #6c47ff;
+            color: #fff;
+        }
+        .clerk-separator {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.25rem 0;
+            color: #888;
+            font-size: 0.85rem;
+        }
+        .clerk-separator::before,
+        .clerk-separator::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+        #clerk-login-status {
+            font-size: 0.85rem;
+            min-height: 1.2em;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="./index.html">
-            <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+            <img src="assets/img/logo.png" alt="Logo Sharingan Comics" class="navbar-logo">
             <span class="d-none d-lg-inline ms-2 navbar-brand-text">Sharingan Comics</span>
         </a>
-        <h2 class="form-title">Iniciar sesión</h2>
+
+        <h1 class="form-title">Iniciar sesión</h1>
+
+        <!-- ── Sección Clerk (visible cuando Clerk esté configurado) ── -->
+        <div id="clerk-section" style="display:none;">
+            <button type="button" class="btn btn-clerk w-100 mb-2" id="clerk-signin-btn">
+                🔐 Iniciar sesión con Clerk (2FA / Google)
+            </button>
+            <p id="clerk-login-status" class="text-center text-muted"></p>
+            <div class="clerk-separator">o inicia sesión con cuenta local</div>
+        </div>
+
+        <!-- ── Formulario local (siempre visible) ── -->
         <form id="login-form">
             <div class="mb-3">
-                <label for="username" class="form-label">Correo Electrónico</label>
+                <label for="username" class="form-label">Correo o nombre de usuario</label>
                 <input type="text" id="username" name="username" class="form-control"
-                    placeholder="Ingresa tú Correo Electrónico">
+                    placeholder="Ingresa tu correo o nombre de usuario"
+                    autocomplete="username">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
                 <input type="password" id="password" name="password" class="form-control"
-                    placeholder="Ingresa tú Contraseña">
+                    placeholder="Ingresa tu contraseña"
+                    autocomplete="current-password">
             </div>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary w-100" id="login-submit-btn">
                 Iniciar Sesión
             </button>
+            <div id="login-error" class="text-danger mt-2" role="alert" aria-live="polite"></div>
             <div class="form-footer">
                 <p>¿No tienes cuenta? <a href="signup.html">Regístrate</a></p>
                 <p>¿Olvidaste tu contraseña? <a href="#">Recuperar contraseña</a></p>
             </div>
         </form>
     </div>
+
+    <!-- Scripts — orden obligatorio: config → clerk-auth → login -->
     <script src="assets/JS/config.js"></script>
+    <script src="assets/JS/clerk-auth.js"></script>
+    <script>
+        /**
+         * Lógica de la página de login.
+         * Integra autenticación Clerk y JWT local.
+         */
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Inicializar Clerk
+            await ClerkSessionManager.init();
+
+            // Si ya hay sesión activa → redirigir
+            if (ClerkSessionManager.isLoggedIn()) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Mostrar sección Clerk si está disponible y configurado
+            const clerkSection = document.getElementById('clerk-section');
+            if (ClerkSessionManager.isClerkActive() ||
+                (APP_CONFIG.CLERK_PUBLISHABLE_KEY && APP_CONFIG.CLERK_PUBLISHABLE_KEY.trim() !== '')) {
+                if (clerkSection) clerkSection.style.display = 'block';
+            }
+
+            // Botón de login con Clerk
+            const clerkBtn = document.getElementById('clerk-signin-btn');
+            if (clerkBtn) {
+                clerkBtn.addEventListener('click', async () => {
+                    const statusEl = document.getElementById('clerk-login-status');
+                    if (statusEl) statusEl.textContent = 'Redirigiendo a Clerk...';
+                    try {
+                        await ClerkSessionManager.signIn('index.html');
+                    } catch (err) {
+                        if (statusEl) statusEl.textContent = 'Error: ' + (err.message || 'Intenta de nuevo.');
+                    }
+                });
+            }
+        });
+
+        // Escuchar evento clerk-ready para re-evaluar sesión
+        document.addEventListener('clerk-ready', () => {
+            if (ClerkSessionManager.isLoggedIn()) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
     <script src="assets/JS/login.js"></script>
 </body>
 
