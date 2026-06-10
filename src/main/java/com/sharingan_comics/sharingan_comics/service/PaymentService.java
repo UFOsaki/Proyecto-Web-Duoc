@@ -75,9 +75,14 @@ public class PaymentService {
         Usuario usuario = usuarioRepository.findByUsername(usernameAuthenticated)
                 .orElseThrow(() -> new RuntimeException("Usuario autenticado no encontrado"));
 
+        // Verificar coherencia de email (advertencia, no bloqueo durante transición)
+        // Los usuarios Clerk pueden tener emails diferentes a buyerEmail del carrito
         if (!usuario.getEmail().equalsIgnoreCase(request.buyerEmail())) {
-            log.warn("El email del carrito ({}) no coincide con el del token JWT ({}).", request.buyerEmail(), usuario.getEmail());
-            // Opcionalmente se puede bloquear: throw new RuntimeException("Email no coincide con sesión");
+            // Log sin exponer el email completo (privacidad, Ley 21.719)
+            log.warn("Email del carrito no coincide con el del usuario autenticado (ID: {}). " +
+                    "Usando email del usuario autenticado para auditoría.", usuario.getIdUsuario());
+            // En modo Clerk, el email del comprador puede diferir — esto es esperado.
+            // La orden se asocia al usuario interno (Oracle), no al email del carrito.
         }
 
         String externalReference = UUID.randomUUID().toString();
@@ -120,6 +125,10 @@ public class PaymentService {
         orden.setTotal(total);
         ordenRepository.save(orden); // Guarda Orden y OrdenItems (Cascade)
 
+        // Log de auditoría: solo userId y externalReference, no email
+        log.info("[Pago] Orden creada. Usuario ID: {}, ExternalRef: {}, Items: {}, Total: {}",
+                usuario.getIdUsuario(), externalReference, request.items().size(), total);
+
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
                 .success(mpSuccessUrl)
                 .pending(mpPendingUrl)
@@ -158,10 +167,11 @@ public class PaymentService {
 
     @Transactional
     public void processWebhook(Map<String, String> payload) {
-        log.info("Webhook recibido de Mercado Pago: {}", payload);
-        
+        // Log sin exponer paymentId innecesariamente (loguear solo tipo de evento)
+        String type  = payload.get("type");
         String topic = payload.get("topic");
-        String type = payload.get("type");
+        log.info("[Webhook MP] Evento recibido. type={}, topic={}", type, topic);
+
         String paymentId = null;
 
         // Mercado Pago puede enviar "topic=payment" (API antigua) o "type=payment" (API nueva)
