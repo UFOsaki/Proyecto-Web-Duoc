@@ -6,13 +6,54 @@
     <title>Pago Pendiente | Sharingan Comics</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body { background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        .payment-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; max-width: 520px; margin: auto; padding: 2.5rem; text-align: center; }
+        .icon-pending { font-size: 4rem; color: #d29922; margin-bottom: 1rem; }
+        h1 { color: #d29922; }
+        .btn-home { background: #1f6feb; border: none; color: #fff; padding: 0.6rem 1.8rem; border-radius: 8px; font-weight: 600; text-decoration: none; }
+        .btn-home:hover { background: #388bfd; color: #fff; }
+        .info-block { background: #21262d; border-radius: 8px; padding: 1rem; margin: 1rem 0; font-size: 0.9rem; }
+        .spinner-border { color: #d29922; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5 text-center">
-        <h1 class="text-warning mb-4">Pago Pendiente</h1>
-        <p class="lead">Tu pago está siendo procesado por Mercado Pago.</p>
-        <p>Te notificaremos cuando el pago sea confirmado. Puedes revisar el estado de tu compra en tu correo electrónico.</p>
-        <a href="index.html" class="btn btn-primary mt-3">Volver al Inicio</a>
+    <div class="container py-5">
+        <div class="payment-card">
+            <div class="icon-pending">⏳</div>
+            <h1 class="mb-3">Pago Pendiente</h1>
+            <p class="lead mb-1">Tu pago está siendo procesado por Mercado Pago.</p>
+            <p class="text-muted small mb-3">Este proceso puede tardar algunos minutos. <strong>No es necesario que hagas nada más.</strong></p>
+
+            <div class="info-block">
+                <p class="mb-1 small"><strong>¿Qué sigue?</strong></p>
+                <ul class="text-start text-muted small mb-0">
+                    <li>Recibirás un correo cuando el pago sea confirmado.</li>
+                    <li>Tus productos permanecen reservados en el carrito.</li>
+                    <li>Si el pago es aprobado, procesaremos tu orden automáticamente.</li>
+                </ul>
+            </div>
+
+            <div id="ref-block" class="info-block" style="display:none;">
+                <p class="mb-1 small"><strong>Referencia de tu orden:</strong></p>
+                <code id="ref-code" class="text-warning"></code>
+            </div>
+
+            <a href="index.html" class="btn btn-home mt-3">Volver al Catálogo</a>
+        </div>
     </div>
+
+    <script>
+        // No limpiar el carrito — el pago está pendiente de confirmación
+        console.log('[payment-pending] Pago pendiente. Carrito conservado.');
+
+        try {
+            const lastPayment = JSON.parse(localStorage.getItem('lastPaymentPreference'));
+            if (lastPayment && lastPayment.externalReference) {
+                document.getElementById('ref-code').textContent = lastPayment.externalReference;
+                document.getElementById('ref-block').style.display = 'block';
+            }
+        } catch (e) { /* no-op */ }
+    </script>
 </body>
 </html>

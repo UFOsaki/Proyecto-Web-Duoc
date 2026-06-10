@@ -3,21 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pago Exitoso | Sharingan Comics</title>
+    <title>¡Pago Exitoso! | Sharingan Comics</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body { background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        .payment-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; max-width: 520px; margin: auto; padding: 2.5rem; text-align: center; }
+        .icon-success { font-size: 4rem; color: #3fb950; margin-bottom: 1rem; }
+        h1 { color: #3fb950; }
+        .btn-home { background: #1f6feb; border: none; color: #fff; padding: 0.6rem 1.8rem; border-radius: 8px; font-weight: 600; text-decoration: none; }
+        .btn-home:hover { background: #388bfd; color: #fff; }
+        .detail-block { background: #21262d; border-radius: 8px; padding: 1rem; margin: 1rem 0; font-size: 0.9rem; text-align: left; }
+    </style>
 </head>
 <body>
-    <div class="container mt-5 text-center">
-        <h1 class="text-success mb-4">¡Pago Exitoso!</h1>
-        <p class="lead">Tu orden ha sido procesada y aprobada correctamente por Mercado Pago.</p>
-        <p>Gracias por tu compra en Sharingan Comics.</p>
-        <a href="index.html" class="btn btn-primary mt-3">Volver al Inicio</a>
+    <div class="container py-5">
+        <div class="payment-card">
+            <div class="icon-success">✅</div>
+            <h1 class="mb-3">¡Pago Exitoso!</h1>
+            <p class="lead mb-1">Tu orden fue procesada y aprobada correctamente por Mercado Pago.</p>
+            <p class="text-muted small mb-3">Gracias por tu compra en <strong>Sharingan Comics</strong>. Recibirás un correo de confirmación.</p>
+
+            <div class="detail-block" id="payment-details">
+                <p class="mb-1 text-muted"><small>Cargando detalles de pago...</small></p>
+            </div>
+
+            <a href="index.html" class="btn btn-home mt-3">Volver al Catálogo</a>
+        </div>
     </div>
 
     <script>
-        // Limpiar el carrito de compras ya que el pago fue exitoso
+        // Limpiar carrito al confirmar pago exitoso
         localStorage.removeItem('cart');
+
+        // Mostrar referencia del último pago si existe
+        try {
+            const lastPayment = JSON.parse(localStorage.getItem('lastPaymentPreference'));
+            const detailsEl   = document.getElementById('payment-details');
+            if (lastPayment && lastPayment.externalReference) {
+                detailsEl.innerHTML = `
+                    <p class="mb-1"><strong>Referencia de pago:</strong></p>
+                    <code class="d-block text-success">${lastPayment.externalReference}</code>
+                    <p class="mb-0 mt-2 text-muted small">Guarda esta referencia para consultas.</p>
+                `;
+                localStorage.removeItem('lastPaymentPreference');
+            } else {
+                detailsEl.innerHTML = '<p class="mb-0 text-muted small">Consulta tu correo para los detalles de la orden.</p>';
+            }
+        } catch (e) {
+            document.getElementById('payment-details').innerHTML = '<p class="mb-0 text-muted small">Consulta tu correo para los detalles de la orden.</p>';
+        }
     </script>
 </body>
 </html>
