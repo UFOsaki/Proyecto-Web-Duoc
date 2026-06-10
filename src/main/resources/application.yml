@@ -29,13 +29,14 @@ spring:
 server:
   port: 8080
 
-# JWT Configuration
+# ─── JWT Local ─────────────────────────────────────────────────────────────────
+# Autenticación propia (en convivencia temporal con Clerk)
 app:
   jwt:
     secret: ${JWT_SECRET:sharingan-comics-dev-secret-key-change-in-production-min-256-bits-long}
     expiration-ms: 86400000  # 24 horas
 
-# Mercado Pago Configuration
+# ─── Mercado Pago ──────────────────────────────────────────────────────────────
 mercadopago:
   access-token: ${MERCADOPAGO_ACCESS_TOKEN:}
   success-url: ${MP_SUCCESS_URL:http://localhost:8080/payment-success.html}
@@ -43,3 +44,22 @@ mercadopago:
   pending-url: ${MP_PENDING_URL:http://localhost:8080/payment-pending.html}
   notification-url: ${MP_NOTIFICATION_URL:}
 
+# ─── Clerk (Integración de identidad externa con 2FA/MFA) ─────────────────────
+# Configurar en Clerk Dashboard: https://dashboard.clerk.com
+# Variables de entorno requeridas:
+#   CLERK_ENABLED    = true  (para activar la integración)
+#   CLERK_ISSUER     = https://<tu-frontend-api>.clerk.accounts.dev
+#   CLERK_JWKS_URL   = https://<tu-frontend-api>.clerk.accounts.dev/.well-known/jwks.json
+#   CLERK_SECRET_KEY = sk_live_...  (solo si se necesitan llamadas server-to-server)
+#
+# IMPORTANTE:
+#   - CLERK_SECRET_KEY NUNCA debe estar en este archivo ni en Git.
+#   - Si clerk.enabled=false, solo JWT local funciona (modo seguro de fallback).
+#   - CLERK_PUBLISHABLE_KEY va en el frontend (config.js), no aquí.
+#
+# Cumplimiento: ISO 27001 A.9.4.3, Ley 21.459 (protección de credenciales)
+clerk:
+  enabled: ${CLERK_ENABLED:false}
+  issuer: ${CLERK_ISSUER:}
+  jwks-url: ${CLERK_JWKS_URL:}
+  secret-key: ${CLERK_SECRET_KEY:}

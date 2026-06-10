@@ -47,10 +47,15 @@ keystore.jks
 *.jks
 *.zip
 
-### Variables de entorno sensibles ###
+### Variables de entorno sensibles — NUNCA subir al repositorio ###
+# .env.example SÍ se sube (no contiene valores reales)
 .env
 .env.local
 .env.production
+.env.staging
+.env.test
+.env.*
+!.env.example
 
 ### Credenciales de base de datos — NO subir al repositorio ###
 src/main/resources/application.properties

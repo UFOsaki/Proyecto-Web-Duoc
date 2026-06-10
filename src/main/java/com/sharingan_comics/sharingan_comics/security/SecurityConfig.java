@@ -15,6 +15,25 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+/**
+ * SecurityConfig
+ * --------------
+ * Configura Spring Security para convivencia de JWT local y Clerk.
+ *
+ * Políticas de acceso:
+ *  - Públicos: catálogo, assets, login/register, webhooks MP, páginas de pago.
+ *  - Autenticados: profile, create-preference.
+ *  - Solo ADMIN: gestión de productos e inventario sensible.
+ *
+ * CORS:
+ *  Permite orígenes de desarrollo, GitHub Pages y Render.
+ *  Requerido para que el frontend pueda enviar Authorization: Bearer.
+ *
+ * Cumplimiento:
+ *  - ISO 27001 A.9.4.1 (restricción de acceso a información)
+ *  - ISO 27001 A.13.1.3 (segregación en redes)
+ *  - Ley 21.663 (seguridad de sistemas y redes)
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -32,29 +51,55 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // ─── Autenticación ───────────────────────────────────────
-                .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/logout").permitAll()
 
-                // ─── Webhook MP (sin JWT) ─────────────────────────────────
-                .requestMatchers("/api/payments/webhook", "/api/payments/webhook/**").permitAll()
+                // ─── Endpoints de autenticación (público) ─────────────────────
+                .requestMatchers(
+                    "/api/auth/register",
+                    "/api/auth/login",
+                    "/api/auth/logout"
+                ).permitAll()
 
-                // ─── APIs públicas ────────────────────────────────────────
-                .requestMatchers("/api/mangas/**", "/api/images/**").permitAll()
+                // ─── Webhook Mercado Pago (sin JWT, IP/secret de MP) ──────────
+                .requestMatchers(
+                    "/api/payments/webhook",
+                    "/api/payments/webhook/**"
+                ).permitAll()
 
-                // ─── Recursos estáticos y páginas de pago ────────────────
+                // ─── API de productos/mangas (catálogo público) ───────────────
+                .requestMatchers(
+                    "/api/mangas/**",
+                    "/api/images/**",
+                    "/api/productos"        // GET catálogo (si existe endpoint propio)
+                ).permitAll()
+
+                // ─── Recursos estáticos y páginas de resultado de pago ────────
                 .requestMatchers(
                     "/", "/index.html",
                     "/**/*.html", "/**/*.css", "/**/*.js",
-                    "/**/*.png", "/**/*.jpg", "/**/*.webp",
-                    "/**/*.svg", "/**/*.ico", "/**/*.woff2",
-                    "/assets/**"
+                    "/**/*.png", "/**/*.jpg", "/**/*.jpeg",
+                    "/**/*.webp", "/**/*.svg", "/**/*.ico",
+                    "/**/*.woff", "/**/*.woff2", "/**/*.ttf",
+                    "/assets/**",
+                    "/payment-success.html",
+                    "/payment-failure.html",
+                    "/payment-pending.html"
                 ).permitAll()
 
-                // ─── Endpoints autenticados ───────────────────────────────
-                .requestMatchers("/api/auth/profile").authenticated()
+                // ─── Endpoints autenticados (JWT local o Clerk) ───────────────
+                .requestMatchers(
+                    "/api/auth/profile",
+                    "/api/auth/me"
+                ).authenticated()
+
                 .requestMatchers("/api/payments/create-preference").authenticated()
 
-                // ─── Todo lo demás requiere autenticación ─────────────────
+                // ─── Solo ADMIN ───────────────────────────────────────────────
+                // Gestión de productos e inventario — NUNCA exponer al CUSTOMER
+                .requestMatchers(
+                    "/api/admin/**"
+                ).hasRole("ADMIN")
+
+                // ─── Todo lo demás requiere autenticación ─────────────────────
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -63,23 +108,39 @@ public class SecurityConfig {
     }
 
     /**
-     * Bean CORS explícito — requerido para que Spring Security aplique las reglas.
-     * Orígenes permitidos: localhost (dev), GitHub Pages, Render (prod).
+     * Configuración CORS explícita.
+     *
+     * Orígenes permitidos:
+     *  - localhost (desarrollo con Spring Boot y Live Server)
+     *  - GitHub Pages (producción frontend)
+     *  - Render (producción backend, si el frontend está separado)
+     *
+     * IMPORTANTE: allowedOriginPatterns("*") NO se usa — sería inseguro con allowCredentials=true.
+     * Agregar dominios de Render cuando estén disponibles.
+     *
+     * Cumplimiento: ISO 27001 A.13.1.3, Ley 21.663 (seguridad redes).
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
+            // ─── Desarrollo ──────────────────────────────────────────
             "http://localhost:8080",
             "http://localhost:5500",
             "http://localhost:5501",
             "http://127.0.0.1:5500",
             "http://127.0.0.1:5501",
+            // ─── GitHub Pages (producción frontend) ──────────────────
             "https://ufosaki.github.io",
-            "https://felipedev-one.github.io"
+            "https://felipedev-one.github.io",
+            // ─── Clerk (para callbacks OAuth si aplica) ───────────────
+            "https://clerk.sharingancomics.com"
+            // Agregar URL de Render aquí cuando esté disponible:
+            // "https://sharingan-comics.onrender.com"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
 
