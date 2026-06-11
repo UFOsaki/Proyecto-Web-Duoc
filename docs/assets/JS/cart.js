@@ -61,11 +61,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /**
-     * Construye el payload para POST /api/payments/create-preference
+     * Construye el payload para POST /api/payments/create-preference.
      * Valida: sesión activa, carrito no vacío, datos mínimos de cada ítem.
+     * Soporta tanto autenticación Clerk como JWT local.
+     *
+     * @param {string} authToken Token de autenticación ya resuelto (local o Clerk).
      */
-    function buildCheckoutPayload() {
-        const authToken  = localStorage.getItem('authToken');
+    function buildCheckoutPayload(authToken) {
         const loggedUser = getLoggedUser();
         const cart       = getCart();
 
@@ -73,7 +75,14 @@ document.addEventListener('DOMContentLoaded', function () {
             throw new Error('NO_SESSION');
         }
 
-        if (!loggedUser || !loggedUser.email) {
+        // Email: intentar desde usuario local, luego desde Clerk
+        let buyerEmail = loggedUser?.email || null;
+        if (!buyerEmail && typeof ClerkSessionManager !== 'undefined') {
+            const clerkUser = ClerkSessionManager.getCurrentUserInfo();
+            buyerEmail = clerkUser?.email || null;
+        }
+
+        if (!buyerEmail) {
             throw new Error('NO_USER');
         }
 
@@ -91,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         return {
-            buyerEmail: loggedUser.email,
+            buyerEmail,
             items: cart.map(item => ({
                 productCode: item.productCode,
                 title:       item.title,
@@ -296,15 +305,26 @@ document.addEventListener('DOMContentLoaded', function () {
             const originalText = checkoutBtn.textContent;
 
             try {
-                // 1. Construir y validar payload
-                const checkoutPayload = buildCheckoutPayload();
-                const authToken       = localStorage.getItem('authToken');
+                // 1. Obtener token correcto (Clerk o JWT local)
+                //    NUNCA loguear el token
+                let authToken = null;
+                if (typeof ClerkSessionManager !== 'undefined') {
+                    authToken = await ClerkSessionManager.getAuthToken();
+                }
+                // Fallback: JWT local en localStorage
+                if (!authToken) {
+                    authToken = localStorage.getItem('authToken');
+                }
 
-                // 2. Bloquear botón mientras se procesa
+                // 2. Construir y validar payload (requiere authToken para verificar sesión)
+                const checkoutPayload = buildCheckoutPayload(authToken);
+
+                // 3. Bloquear botón mientras se procesa
                 checkoutBtn.textContent = 'Procesando...';
                 checkoutBtn.disabled    = true;
 
-                console.log('[Checkout] Enviando payload a backend:', checkoutPayload);
+                // No loguear el payload si contiene datos sensibles del usuario
+                console.log('[Checkout] Iniciando proceso de pago...');
 
                 // 3. POST al backend Spring Boot
                 const response = await fetch(

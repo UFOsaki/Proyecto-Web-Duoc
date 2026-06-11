@@ -4,24 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil | Sharingan Comics</title>
+    <meta name="description" content="Tu perfil en Sharingan Comics. Gestiona tu información, método de autenticación y configuración de cuenta.">
+    <title>Mi Perfil | Sharingan Comics</title>
     <link rel="icon" href="assets/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/login.css">
     <link rel="stylesheet" href="assets/css/profile.css">
+    <style>
+        /* ── Badges de estado de sesión ── */
+        .auth-badge {
+            font-size: 0.78rem;
+            padding: 0.25em 0.6em;
+            border-radius: 0.4em;
+        }
+        .mfa-status {
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <h2 class="form-title">Perfil</h2>
+        <a class="navbar-brand d-flex align-items-center mb-3" href="./index.html">
+            <img src="assets/img/logo.png" alt="Logo Sharingan Comics" class="navbar-logo">
+            <span class="d-none d-lg-inline ms-2 navbar-brand-text">Sharingan Comics</span>
+        </a>
+
+        <h1 class="form-title">Mi Perfil</h1>
+
+        <!-- ── Información de sesión (auth provider + MFA) ── -->
+        <div id="session-info" class="mb-3" style="display:none;">
+            <span id="auth-provider-badge" class="badge auth-badge bg-secondary">LOCAL</span>
+            <span id="mfa-badge" style="display:none;" class="badge auth-badge bg-success ms-1">2FA activo ✓</span>
+        </div>
+
         <div class="profile-header">
             <img src="assets/img/logo.png" alt="Foto de perfil" class="profile-pic" id="profile-img-preview">
-            <br>
-            <div class="file-upload-wrapper btn btn-outline-secondary btn-sm">
-                <span> Cambiar foto de perfil</span>
-                <input type="file" id="profile-pic-input" accept="image/*">
-            </div>
         </div>
+
         <form id="profile-form">
             <div class="mb-3">
                 <label for="profile-username" class="form-label">Nombre de Usuario</label>
@@ -37,19 +60,42 @@
 
             <div class="mb-3">
                 <label for="profile-phone" class="form-label">Número de Teléfono</label>
-                <input type="tel" id="profile-phone" class="form-control" placeholder="+56 9 1234 5678">
+                <input type="tel" id="profile-phone" class="form-control"
+                    placeholder="+56 9 1234 5678">
+            </div>
+
+            <div class="mb-3">
+                <label for="profile-role" class="form-label">Rol</label>
+                <input type="text" id="profile-role" class="form-control" readonly
+                    placeholder="CUSTOMER">
+            </div>
+
+            <!-- ── Estado MFA ── -->
+            <div id="mfa-info" class="mfa-status bg-light border" style="display:none;">
+                <strong>🔐 Autenticación de dos factores (2FA):</strong>
+                <span id="mfa-text">No configurado</span>
+                <br>
+                <small class="text-muted">
+                    Para configurar o modificar el 2FA, usa el portal de Clerk.
+                    <a id="clerk-mfa-link" href="https://accounts.clerk.dev" target="_blank" rel="noopener">
+                        Gestionar 2FA →
+                    </a>
+                </small>
             </div>
 
             <div class="d-grid gap-3 mt-4">
                 <button type="button" id="save-profile" class="btn btn-primary">Guardar cambios</button>
             </div>
         </form>
-        <a href="index.html" id="exit-index" class="btn btn-primary">
-            Volver
-        </a>
-        <button id="logout-button" class="btn btn-danger mt-2">Cerrar sesión</button>
+
+        <div class="d-flex gap-2 mt-3">
+            <a href="./index.html" id="exit-index" class="btn btn-secondary">Volver al inicio</a>
+            <button type="button" id="logout-button" class="btn btn-danger">Cerrar sesión</button>
+        </div>
     </div>
+
     <script src="assets/JS/config.js"></script>
+    <script src="assets/JS/clerk-auth.js"></script>
     <script src="assets/JS/profile.js"></script>
 </body>
 
