@@ -12,7 +12,6 @@
  * IMPORTANTE:
  *  - CLERK_PUBLISHABLE_KEY es seguro en frontend (es público por diseño de Clerk).
  *  - CLERK_SECRET_KEY NUNCA debe estar en este archivo.
- *  - Completar CLERK_PUBLISHABLE_KEY con el valor real de tu Clerk Dashboard.
  *
  * Para producción (GitHub Pages + Render):
  *  - Cambiar AUTH_API_BASE_URL al dominio de Render.
@@ -38,11 +37,10 @@ const APP_CONFIG = {
     AUTH_MODE: 'hybrid',
 
     // ─── Clerk (Identidad externa con 2FA/MFA y Google login) ─────────────────
-    // Obtener en: https://dashboard.clerk.com → Tu aplicación → API Keys
-    // pk_test_... para desarrollo, pk_live_... para producción.
-    // Es SEGURO tener la publishable key en el frontend.
-    CLERK_PUBLISHABLE_KEY: '',  // ← Completar con tu pk_test_... o pk_live_...
+    // Clerk frontend API: https://tender-coral-13.clerk.accounts.dev
+    // Es SEGURO tener la publishable key en el frontend (es pública por diseño).
+    CLERK_PUBLISHABLE_KEY: 'pk_test_dGVuZGVyLWNvcmFsLTEzLmNsZXJrLmFjY291bnRzLmRldiQ',
 
-    // URL de Clerk para configuración de cuentas (opcional, depende del plan)
+    // URL de Clerk para configuración de cuentas
     CLERK_ACCOUNT_PORTAL: 'https://accounts.clerk.dev',
 };

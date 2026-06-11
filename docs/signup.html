@@ -4,21 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign up | Sharingan Comics</title>
+    <meta name="description" content="Crea tu cuenta en Sharingan Comics. Regístrate con cuenta propia o con Google via Clerk.">
+    <title>Crear cuenta | Sharingan Comics</title>
     <link rel="icon" href="assets/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Estilo inicial -->
     <link rel="stylesheet" href="assets/css/login.css">
-    <!-- Estilo formulario de registro -->
     <link rel="stylesheet" href="assets/css/signup.css">
+    <style>
+        .btn-clerk { background: #1a1a2e; color: #fff; border: 1px solid #6c47ff; transition: background 0.2s; }
+        .btn-clerk:hover { background: #6c47ff; color: #fff; }
+        .clerk-separator { display: flex; align-items: center; gap: .75rem; margin: 1.25rem 0; color: #888; font-size: .85rem; }
+        .clerk-separator::before, .clerk-separator::after { content: ''; flex: 1; height: 1px; background: #ddd; }
+    </style>
 </head>
 
 <body>
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="./index.html">
-            <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+            <img src="assets/img/logo.png" alt="Logo Sharingan Comics" class="navbar-logo">
             <span class="d-none d-lg-inline ms-2 navbar-brand-text">Sharingan Comics</span>
         </a>
+
+        <h1 class="form-title">Crear cuenta</h1>
+
+        <!-- Botón Clerk (visible solo si Clerk está configurado) -->
+        <div id="clerk-signup-section" style="display:none;">
+            <button type="button" class="btn btn-clerk w-100 mb-2" id="clerk-signup-btn">
+                🔐 Registrarse con Clerk (Google / 2FA)
+            </button>
+            <div class="clerk-separator">o crea una cuenta local</div>
+        </div>
+
         <form id="signup-form">
             <div class="step" id="step-1">
                 <div class="mb-3">
@@ -55,9 +71,25 @@
         </form>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/JS/config.js"></script>
+    <script src="assets/JS/clerk-auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await ClerkSessionManager.init();
+            // Mostrar botón Clerk si está disponible
+            if (APP_CONFIG.CLERK_PUBLISHABLE_KEY && APP_CONFIG.CLERK_PUBLISHABLE_KEY.trim() !== '') {
+                const sec = document.getElementById('clerk-signup-section');
+                if (sec) sec.style.display = 'block';
+            }
+            const btn = document.getElementById('clerk-signup-btn');
+            if (btn) {
+                btn.addEventListener('click', async () => {
+                    await ClerkSessionManager.signUp('index.html');
+                });
+            }
+        });
+    </script>
     <script src="assets/JS/signup.js"></script>
 </body>
 

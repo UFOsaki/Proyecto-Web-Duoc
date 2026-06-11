@@ -217,13 +217,28 @@ Reglas implementadas:
 
 ## 5. Pendientes
 
-- [ ] Completar `CLERK_PUBLISHABLE_KEY` en `config.js` con valor real del Dashboard.
-- [ ] Configurar variables de entorno en el servidor Render.
-- [ ] Activar MFA en Clerk Dashboard y capturar evidencia.
-- [ ] Configurar Google como social provider en Clerk Dashboard.
+### ✅ Completados
+- [x] `CLERK_PUBLISHABLE_KEY` asignada en `config.js` (`pk_test_dGVuZGVy...`).
+- [x] `CLERK_ISSUER` y `CLERK_JWKS_URL` configurados en `application.yml` (tender-coral-13).
+- [x] `CLERK_ENABLED=true` como default en `application.yml`.
+- [x] `profile.html` resuelto (conflictos de merge eliminados) + badge MFA.
+- [x] `profile.js` actualizado con ClerkSessionManager y display de authProvider/mfaEnabled.
+- [x] `docs/` sincronizado completamente con `src/main/resources/static/`.
+- [x] `docs/assets/JS/clerk-auth.js` agregado a GitHub Pages.
+- [x] Rama `Smoke` pusheada a GitHub.
+
+### ⬜ Pendientes de configuración manual
+- [ ] Activar MFA (TOTP) en Clerk Dashboard → Configure → Multi-factor.
+- [ ] Activar Google como social provider → Configure → Social connections.
+- [ ] Agregar Redirect URLs en Clerk Dashboard:
+  - `http://localhost:8080/index.html`
+  - `https://ufosaki.github.io/Proyecto-Web-Duoc/index.html`
 - [ ] Ejecutar `database/migrations/2026_clerk_auth.sql` en Oracle producción.
-- [ ] Agregar URL Render a la lista de allowed origins en `SecurityConfig`.
-- [ ] Agregar URL Render a los Redirect URLs en Clerk Dashboard.
-- [ ] Probar flujo completo: Clerk login → backend → Mercado Pago.
-- [ ] Considerar cache JWKS con TTL para reducir latencia.
+- [ ] Configurar variables de entorno `CLERK_SECRET_KEY` en Render (si se necesita).
+- [ ] Agregar URL Render a CORS en `SecurityConfig.java` cuando esté disponible.
+- [ ] Agregar URL Render a Redirect URLs en Clerk Dashboard.
+
+### ⬜ Pendientes de prueba y evidencia
+- [ ] Probar flujo completo: Clerk login → `/api/auth/profile` → Mercado Pago.
+- [ ] Capturar las 14 evidencias del checklist en `docs-developer/evidencias/README.md`.
 - [ ] Planificar migración completa cuando Clerk esté validado (remover JWT local).
