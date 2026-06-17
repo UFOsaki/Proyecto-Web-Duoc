@@ -40,10 +40,10 @@ public class MangaProxyController {
     }
 
     /**
-     * GET /api/mangas
+     * GET /api/mangas y /api/mangas/images
      * Retorna la lista completa de mangas desde la API externa.
      */
-    @GetMapping(produces = "application/json")
+    @GetMapping(value = {"", "/images"}, produces = "application/json")
     public ResponseEntity<String> getAllMangas() {
         String url = EXTERNAL_API_BASE + "/images";
         log.info("Proxy → GET {}", url);
@@ -74,10 +74,10 @@ public class MangaProxyController {
     }
 
     /**
-     * GET /api/mangas/{id}
+     * GET /api/mangas/{id} y /api/mangas/images/{id}
      * Retorna los detalles de un manga específico por su ID.
      */
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = {"/{id}", "/images/{id}"}, produces = "application/json")
     public ResponseEntity<String> getMangaById(@PathVariable String id) {
         String url = EXTERNAL_API_BASE + "/images/" + id;
         log.info("Proxy → GET {}", url);

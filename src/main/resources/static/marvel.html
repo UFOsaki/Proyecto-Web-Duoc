@@ -71,6 +71,36 @@
         </div>
     </div>
 
+    <!-- Modal de Detalles -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Detalles del Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img id="modal-image" src="" alt="Imagen del Producto" class="img-fluid">
+                        </div>
+                        <div class="col-md-8">
+                            <h5 id="modal-title"></h5>
+                            <p id="modal-genres"><strong>Géneros:</strong> </p>
+                            <p><strong>Descripción:</strong> <span id="modal-synopsis"></span></p>
+                            <p><strong>Precio:</strong> $<span id="modal-price"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="add-to-cart-button" class="btn btn-success">
+                        Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-dark text-white text-center py-3 mt-4">
         <div class="container">
             <p>© 2024 Sharingan Comic Store. Todos los derechos reservados.</p>
@@ -83,6 +113,8 @@
     <script src="assets/JS/config.js"></script>
     <script src="assets/JS/clerk-auth.js"></script>
     <script src="assets/JS/catalogConfig.js"></script>
+    <script src="assets/JS/cards.js"></script>
+    <script src="assets/JS/search.js"></script>
     <script src="assets/JS/session.js"></script>
     <script src="assets/JS/cart.js"></script>
 </body>

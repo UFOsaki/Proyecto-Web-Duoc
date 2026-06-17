@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@${ORACLE_DB_TNS_ALIAS:sharingan_medium}?TNS_ADMIN=${TNS_ADMIN:C:/Workspace/oracle-wallet}
     username: ${ORACLE_DB_USERNAME:ADMIN}
-    password: ${ORACLE_DB_PASSWORD:}
+    password: ${ORACLE_DB_PASSWORD:Integracion123}
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       connection-timeout: 30000

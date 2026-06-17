@@ -13,6 +13,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import java.util.List;
 
 /**
@@ -74,15 +76,24 @@ public class SecurityConfig {
 
                 // ─── Recursos estáticos y páginas de resultado de pago ────────
                 .requestMatchers(
-                    "/", "/index.html",
-                    "/**/*.html", "/**/*.css", "/**/*.js",
-                    "/**/*.png", "/**/*.jpg", "/**/*.jpeg",
-                    "/**/*.webp", "/**/*.svg", "/**/*.ico",
-                    "/**/*.woff", "/**/*.woff2", "/**/*.ttf",
-                    "/assets/**",
-                    "/payment-success.html",
-                    "/payment-failure.html",
-                    "/payment-pending.html"
+                    AntPathRequestMatcher.antMatcher("/"),
+                    AntPathRequestMatcher.antMatcher("/index.html"),
+                    AntPathRequestMatcher.antMatcher("/**/*.html"),
+                    AntPathRequestMatcher.antMatcher("/**/*.css"),
+                    AntPathRequestMatcher.antMatcher("/**/*.js"),
+                    AntPathRequestMatcher.antMatcher("/**/*.png"),
+                    AntPathRequestMatcher.antMatcher("/**/*.jpg"),
+                    AntPathRequestMatcher.antMatcher("/**/*.jpeg"),
+                    AntPathRequestMatcher.antMatcher("/**/*.webp"),
+                    AntPathRequestMatcher.antMatcher("/**/*.svg"),
+                    AntPathRequestMatcher.antMatcher("/**/*.ico"),
+                    AntPathRequestMatcher.antMatcher("/**/*.woff"),
+                    AntPathRequestMatcher.antMatcher("/**/*.woff2"),
+                    AntPathRequestMatcher.antMatcher("/**/*.ttf"),
+                    AntPathRequestMatcher.antMatcher("/assets/**"),
+                    AntPathRequestMatcher.antMatcher("/payment-success.html"),
+                    AntPathRequestMatcher.antMatcher("/payment-failure.html"),
+                    AntPathRequestMatcher.antMatcher("/payment-pending.html")
                 ).permitAll()
 
                 // ─── Endpoints autenticados (JWT local o Clerk) ───────────────

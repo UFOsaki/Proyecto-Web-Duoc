@@ -18,8 +18,11 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         console.log('Formulario de login enviado');
 
-        const usernameOrEmail = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value.trim();
+        const emailInput = document.getElementById('username') || document.getElementById('login-email');
+        const passwordInput = document.getElementById('password') || document.getElementById('login-password');
+
+        const usernameOrEmail = emailInput ? emailInput.value.trim() : '';
+        const password = passwordInput ? passwordInput.value.trim() : '';
 
         if (!usernameOrEmail || !password) {
             alert('Debes completar todos los campos.');

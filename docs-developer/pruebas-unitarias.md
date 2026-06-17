@@ -9,14 +9,15 @@
 
 ## 1. Resumen Ejecutivo
 
-Se implementaron **21 pruebas unitarias** distribuidas en 3 clases de test, cubriendo los componentes críticos del backend:
+Se implementaron **22 pruebas unitarias e integración de contexto** distribuidas en 4 clases de test, cubriendo los componentes críticos del backend:
 
 | Clase de Test | Componente bajo prueba | Tests | Resultado |
 |--------------|----------------------|-------|-----------|
 | `JwtUtilTest` | Generación y validación de tokens JWT | 8 | ✅ 8/8 PASS |
 | `AuthServiceTest` | Servicio de autenticación (registro/login) | 6 | ✅ 6/6 PASS |
 | `PaymentServiceValidationTest` | Validaciones de DTOs de pago | 7 | ✅ 7/7 PASS |
-| **TOTAL** | | **21** | ✅ **21/21 PASS** |
+| `SharinganComicsApplicationTests` | Carga de contexto de aplicación y conectividad Oracle | 1 | ✅ 1/1 PASS |
+| **TOTAL** | | **22** | ✅ **22/22 PASS** |
 
 ### Resultado de ejecución
 
@@ -24,25 +25,29 @@ Se implementaron **21 pruebas unitarias** distribuidas en 3 clases de test, cubr
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-[INFO] Running c.s.s.security.JwtUtilTest
-[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.301 s
-[INFO] Running c.s.s.service.AuthServiceTest
-[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.640 s
-[INFO] Running c.s.s.service.PaymentServiceValidationTest
-[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.143 s
+[INFO] Running com.sharingan_comics.sharingan_comics.security.JwtUtilTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.258 s
+[INFO] Running com.sharingan_comics.sharingan_comics.service.AuthServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.710 s
+[INFO] Running com.sharingan_comics.sharingan_comics.service.PaymentServiceValidationTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.297 s
+[INFO] Running com.sharingan_comics.sharingan_comics.SharinganComicsApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 57.77 s
 [INFO]
 [INFO] Results:
 [INFO]
-[INFO] Tests run: 21, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0
 [INFO]
+[INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
-[INFO] Total time:  47.165 s
-[INFO] Finished at: 2026-06-17T13:08:11-04:00
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:23 min
+[INFO] Finished at: 2026-06-17T15:22:06-04:00
 ```
 
 **Comando de ejecución:**
 ```powershell
-.\mvnw.cmd test "-Dtest=JwtUtilTest,AuthServiceTest,PaymentServiceValidationTest"
+.\mvnw.cmd test
 ```
 
 ---
@@ -253,6 +258,6 @@ WARNING: A Java agent has been loaded dynamically (byte-buddy-agent-1.15.11.jar)
 
 > Este warning es cosmético y no afecta la ejecución ni los resultados de las pruebas. Es un aviso de Mockito sobre la carga dinámica de agents en Java 17+. En futuras versiones se resolverá agregando `-javaagent` en la configuración de Maven Surefire.
 
-### Exclusión de SharinganComicsApplicationTests
+### Inclusión de SharinganComicsApplicationTests
 
-El test de contexto `SharinganComicsApplicationTests` se excluye de la ejecución selectiva porque requiere conexión a Oracle (Wallet). Las 21 pruebas ejecutadas son completamente autónomas y no necesitan infraestructura externa.
+El test de contexto `SharinganComicsApplicationTests` se ejecuta y valida con éxito, ya que la base de datos Oracle Wallet está configurada correctamente en el entorno local. Esto demuestra la inicialización correcta del contexto de Spring Boot, el DataSource de Hikari, la JPA y las propiedades de seguridad de Clerk.

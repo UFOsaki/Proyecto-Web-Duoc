@@ -105,22 +105,24 @@ function formatPriceCLP(price) {
 function buildMangaItem(apiManga, baseUrl) {
     const config = getMangaConfig(apiManga.id);
 
-    const rawImage = apiManga.imageUrl || apiManga.url || "";
+    const rawImage = apiManga.imageUrl || apiManga.url || apiManga.image || "";
 
-    const finalImageUrl = rawImage.startsWith("http")
+    const finalImageUrl = (rawImage.startsWith("http") || rawImage.startsWith("assets") || rawImage.startsWith("/"))
         ? rawImage
         : `${baseUrl}${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
 
     return {
         id: apiManga.id,
-        partNumber: config.partNumber,
+        partNumber: apiManga.partNumber || config.partNumber,
         title: apiManga.title,
         genre: apiManga.genre,
         imageUrl: finalImageUrl,
-        price: config.price,
-        currency: config.currency,
-        stock: config.stock,
-        synopsis: config.synopsis,
-        description: config.synopsis
+        price: apiManga.price || config.price,
+        currency: apiManga.currency || config.currency,
+        stock: apiManga.stock !== undefined ? apiManga.stock : config.stock,
+        synopsis: apiManga.synopsis || config.synopsis,
+        description: apiManga.description || apiManga.synopsis || config.synopsis,
+        category: apiManga.category || "Manga",
+        editorial: apiManga.editorial || "Shueisha"
     };
 }

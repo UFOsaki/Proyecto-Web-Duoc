@@ -60,26 +60,62 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ──────────────────────────────────────────
-    // FETCH CON FALLBACK CORS PROXY
+    // FETCH MULTI-ORIGEN CON RESILIENCIA (FALLBACK)
     // ──────────────────────────────────────────
 
-    /**
-     * Intenta fetch directo a la API.
-     * Si falla (CORS), reintenta a través del proxy.
-     */
-    async function fetchWithCorsProxy(url) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response;
-        } catch (directError) {
-            console.warn('Fetch directo falló, intentando con proxy CORS...', directError.message);
-            const proxiedUrl = `${CORS_PROXY}${encodeURIComponent(url)}`;
-            const response = await fetch(proxiedUrl);
-            if (!response.ok) throw new Error(`Proxy HTTP ${response.status}`);
-            console.log('Fetch exitoso vía proxy CORS');
-            return response;
+    async function loadCatalogData() {
+        let rawItems = [];
+        let fetchedFromApi = false;
+
+        const primarySources = [];
+        if (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.MANGA_API_BASE_URL) {
+            primarySources.push(`${APP_CONFIG.MANGA_API_BASE_URL}/images`);
         }
+        primarySources.push('/api/mangas/images');
+
+        for (const url of primarySources) {
+            try {
+                console.log(`Intentando cargar catálogo desde: ${url}`);
+                const response = await fetch(url);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        rawItems = data.map(item => {
+                            return { ...item, category: item.category || 'Manga' };
+                        });
+                        fetchedFromApi = true;
+                        console.log(`Catálogo cargado exitosamente de la API/Proxy: ${url}`);
+                        break;
+                    }
+                }
+            } catch (err) {
+                console.warn(`Fallo al cargar de la fuente ${url}:`, err.message);
+            }
+        }
+
+        let fallbackItems = [];
+        try {
+            console.log('Cargando catálogo fallback local...');
+            const response = await fetch('assets/data/catalogo-fallback.json');
+            if (response.ok) {
+                fallbackItems = await response.json();
+                console.log(`Catálogo fallback cargado: ${fallbackItems.length} items.`);
+            }
+        } catch (err) {
+            console.error('Error al cargar catalogo-fallback.json:', err);
+        }
+
+        if (!fetchedFromApi) {
+            console.warn('No se pudo contactar ninguna API de mangas. Usando fallback local completo.');
+            rawItems = fallbackItems;
+        } else {
+            const nonMangaItems = fallbackItems.filter(item => item.category !== 'Manga');
+            const apiMangaIds = new Set(rawItems.map(item => String(item.id)));
+            const uniqueNonMangaItems = nonMangaItems.filter(item => !apiMangaIds.has(String(item.id)));
+            rawItems = [...rawItems, ...uniqueNonMangaItems];
+        }
+
+        return rawItems;
     }
 
     // ──────────────────────────────────────────
@@ -161,30 +197,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function loadMangas() {
         showLoadingState();
-        console.log('Cargando catálogo desde:', `${API_BASE_URL}/images`);
-
         try {
-            const response = await fetchWithCorsProxy(`${API_BASE_URL}/images`);
-            const apiMangas = await response.json();
-
+            const rawItems = await loadCatalogData();
             cardsContainer.innerHTML = '';
 
-            if (!Array.isArray(apiMangas) || apiMangas.length === 0) {
-                showError('No se encontraron mangas en el catálogo.');
+            // Determinar categoría por el nombre de archivo en la URL actual
+            const pathname = window.location.pathname.toLowerCase();
+            let activeCategory = null;
+            if (pathname.includes('mangas.html')) {
+                activeCategory = 'Manga';
+            } else if (pathname.includes('dc.html')) {
+                activeCategory = 'DC';
+            } else if (pathname.includes('marvel.html')) {
+                activeCategory = 'Marvel';
+            }
+
+            let filteredItems = rawItems;
+            if (activeCategory) {
+                filteredItems = rawItems.filter(item => {
+                    const cat = item.category || 'Manga';
+                    return cat.toLowerCase() === activeCategory.toLowerCase();
+                });
+            }
+
+            if (filteredItems.length === 0) {
+                showError('No se encontraron cómics o mangas en esta categoría.');
                 return;
             }
 
-            apiMangas.forEach(apiManga => {
-                const manga = buildMangaItem(apiManga, API_BASE_URL);
+            loadedMangas = [];
+            filteredItems.forEach(apiItem => {
+                const manga = buildMangaItem(apiItem, API_BASE_URL);
                 loadedMangas.push(manga);
                 const card = createCard(manga);
                 cardsContainer.appendChild(card);
             });
 
-            console.log(`Catálogo cargado: ${loadedMangas.length} mangas`);
+            console.log(`Renderizados ${loadedMangas.length} productos para la categoría: ${activeCategory || 'Todos'}`);
         } catch (error) {
-            console.error('Error al cargar el catálogo desde la API:', error);
-            showError('No se pudo cargar el catálogo. Verifica tu conexión a internet.');
+            console.error('Error al cargar el catálogo:', error);
+            showError('No se pudo cargar el catálogo. Mostrando error del sistema.');
         }
     }
 
@@ -201,14 +253,32 @@ document.addEventListener('DOMContentLoaded', function () {
             let manga = loadedMangas.find(m => String(m.id) === String(mangaId));
 
             if (!manga) {
-                // Fallback: fetch individual si no está en cache
-                const response = await fetchWithCorsProxy(`${API_BASE_URL}/images/${mangaId}`);
-                const apiManga = await response.json();
-                manga = buildMangaItem(apiManga, API_BASE_URL);
+                // Si no se encuentra en caché, intentar fetch desde local proxy o de fallback JSON
+                try {
+                    const response = await fetch(`/api/mangas/images/${mangaId}`);
+                    if (response.ok) {
+                        const apiManga = await response.json();
+                        manga = buildMangaItem(apiManga, API_BASE_URL);
+                    }
+                } catch (_) {}
+
+                if (!manga) {
+                    const response = await fetch('assets/data/catalogo-fallback.json');
+                    if (response.ok) {
+                        const fallbackItems = await response.json();
+                        const found = fallbackItems.find(m => String(m.id) === String(mangaId));
+                        if (found) manga = buildMangaItem(found, API_BASE_URL);
+                    }
+                }
+            }
+
+            if (!manga) {
+                alert('No se pudo encontrar el detalle de este producto.');
+                return;
             }
 
             document.getElementById('modal-title').textContent = capitalizeTitle(manga.title);
-            document.getElementById('modal-genres').textContent = `Géneros: ${formatGenre(manga.genre)}`;
+            document.getElementById('modal-genres').innerHTML = `<strong>Géneros:</strong> ${formatGenre(manga.genre)} | <strong>Editorial:</strong> ${manga.editorial || 'No disponible'}`;
             document.getElementById('modal-synopsis').textContent = manga.synopsis;
             document.getElementById('modal-price').textContent = formatPrice(manga.price);
             document.getElementById('modal-image').src = manga.imageUrl;
