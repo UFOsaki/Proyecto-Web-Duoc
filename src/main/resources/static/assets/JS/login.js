@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }));
 
             alert('Inicio de sesión exitoso.');
-            window.location.href = 'index.html';
+            window.location.href = (typeof ClerkSessionManager !== 'undefined') ? ClerkSessionManager.getHomeUrl() : 'index.html';
 
         } catch (error) {
             console.error('Error de red al iniciar sesión:', error);
