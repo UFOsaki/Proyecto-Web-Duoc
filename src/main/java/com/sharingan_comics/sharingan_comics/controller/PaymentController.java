@@ -41,7 +41,7 @@ public class PaymentController {
         log.info("Creando preferencia para usuario: {}", usuario.getUsername());
 
         try {
-            CreatePreferenceResponse response = paymentService.createPreference(request, usuario.getUsername());
+            CreatePreferenceResponse response = paymentService.createPreference(request, usuario);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             log.warn("Solicitud de pago inválida: {}", e.getMessage());

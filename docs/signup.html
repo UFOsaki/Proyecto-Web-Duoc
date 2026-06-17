@@ -85,7 +85,7 @@
             const btn = document.getElementById('clerk-signup-btn');
             if (btn) {
                 btn.addEventListener('click', async () => {
-                    await ClerkSessionManager.signUp('index.html');
+                    await ClerkSessionManager.signUp(ClerkSessionManager.getHomeUrl());
                 });
             }
         });

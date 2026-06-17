@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('loggedInUser');
-                window.location.href = 'index.html';
+                window.location.href = (typeof ClerkSessionManager !== 'undefined') ? ClerkSessionManager.getHomeUrl() : 'index.html';
             }
         });
     }

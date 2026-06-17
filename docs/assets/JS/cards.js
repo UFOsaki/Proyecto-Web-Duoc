@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     class="card-img-top img-fluid"
                     alt="Portada de ${title}"
                     loading="lazy"
-                    onerror="this.src='https://via.placeholder.com/300x420?text=Sin+imagen'"
+                    onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'420\' viewBox=\'0 0 300 420\'><rect width=\'100%\' height=\'100%\' fill=\'%231a1a2e\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%236c47ff\' font-family=\'sans-serif\' font-size=\'18\' font-weight=\'bold\'>Sharingan Comics</text></svg>'"
                 >
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${title}</h5>
@@ -281,8 +281,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('modal-genres').innerHTML = `<strong>Géneros:</strong> ${formatGenre(manga.genre)} | <strong>Editorial:</strong> ${manga.editorial || 'No disponible'}`;
             document.getElementById('modal-synopsis').textContent = manga.synopsis;
             document.getElementById('modal-price').textContent = formatPrice(manga.price);
-            document.getElementById('modal-image').src = manga.imageUrl;
-            document.getElementById('modal-image').alt = `Portada de ${capitalizeTitle(manga.title)}`;
+            const modalImg = document.getElementById('modal-image');
+            if (modalImg) {
+                modalImg.src = manga.imageUrl;
+                modalImg.alt = `Portada de ${capitalizeTitle(manga.title)}`;
+                modalImg.onerror = function() {
+                    this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='420' viewBox='0 0 300 420'><rect width='100%' height='100%' fill='%231a1a2e'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%236c47ff' font-family='sans-serif' font-size='18' font-weight='bold'>Sharingan Comics</text></svg>";
+                };
+            }
 
             const addBtn = document.getElementById('add-to-cart-button');
 

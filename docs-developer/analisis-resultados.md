@@ -8,11 +8,11 @@
 
 ## 1. Resumen Ejecutivo
 
-Se ejecutaron **21 pruebas unitarias automatizadas** y **22 casos de prueba** (manuales, de integración y de seguridad), cubriendo todas las funcionalidades principales del sistema Sharingan Comics y sus 5 integraciones externas.
+Se ejecutaron **22 pruebas unitarias automatizadas** y **22 casos de prueba** (manuales, de integración y de seguridad), cubriendo todas las funcionalidades principales del sistema Sharingan Comics y sus 5 integraciones externas.
 
 | Métrica | Valor |
 |---------|-------|
-| Pruebas unitarias automatizadas | 21/21 PASS (100%) |
+| Pruebas unitarias automatizadas | 22/22 PASS (100%) |
 | Casos de prueba documentados | 22/22 Aprobados (100%) |
 | Integraciones externas validadas | 5/5 (100%) |
 | Evidencias documentadas | 18/18 Verificadas (100%) |

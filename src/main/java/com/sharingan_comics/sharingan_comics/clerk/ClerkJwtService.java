@@ -188,16 +188,6 @@ public class ClerkJwtService {
                 return Optional.empty();
             }
 
-            // Validar firma, issuer y expiración
-            Claims claims = Jwts.parser()
-                    .verifyWith(publicKey instanceof java.security.interfaces.RSAPublicKey
-                            ? Keys.hmacShaKeyFor(new byte[0]) // placeholder, ver abajo
-                            : null)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-
-            // Nota: JJWT 0.12.x requiere setSigningKey para RSA. Usamos approach alternativo:
             return validateWithRsaKey(token, publicKey);
 
         } catch (Exception e) {

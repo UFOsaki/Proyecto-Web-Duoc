@@ -83,7 +83,7 @@ const checkSession = () => {
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('loggedInUser');
                 localStorage.removeItem('lastPaymentPreference');
-                window.location.href = 'index.html';
+                window.location.href = (typeof ClerkSessionManager !== 'undefined') ? ClerkSessionManager.getHomeUrl() : 'index.html';
             }
         });
         sessionActions.appendChild(logoutButton);

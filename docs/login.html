@@ -100,7 +100,7 @@
 
             // Si ya hay sesión activa → redirigir
             if (ClerkSessionManager.isLoggedIn()) {
-                window.location.href = 'index.html';
+                window.location.href = ClerkSessionManager.getHomeUrl();
                 return;
             }
 
@@ -118,7 +118,7 @@
                     const statusEl = document.getElementById('clerk-login-status');
                     if (statusEl) statusEl.textContent = 'Redirigiendo a Clerk...';
                     try {
-                        await ClerkSessionManager.signIn('index.html');
+                        await ClerkSessionManager.signIn(ClerkSessionManager.getHomeUrl());
                     } catch (err) {
                         if (statusEl) statusEl.textContent = 'Error: ' + (err.message || 'Intenta de nuevo.');
                     }
@@ -129,7 +129,7 @@
         // Escuchar evento clerk-ready para re-evaluar sesión
         document.addEventListener('clerk-ready', () => {
             if (ClerkSessionManager.isLoggedIn()) {
-                window.location.href = 'index.html';
+                window.location.href = ClerkSessionManager.getHomeUrl();
             }
         });
     </script>

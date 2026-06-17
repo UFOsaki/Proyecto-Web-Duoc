@@ -42,6 +42,26 @@ window.ClerkSessionManager = (function () {
     let _initialized = false;
     let _initPromise = null;
 
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+
+    /**
+     * Resuelve de forma dinámica la URL base de la página de inicio (home)
+     * para asegurar compatibilidad local (Spring Boot / Live Server) y en GitHub Pages.
+     * @returns {string} URL absoluta de inicio
+     */
+    function getHomeUrl() {
+        const origin = window.location.origin;
+        const path = window.location.pathname;
+        if (path.includes('/Proyecto-Web-Duoc/')) {
+            return origin + '/Proyecto-Web-Duoc/';
+        }
+        const lastSlashIndex = path.lastIndexOf('/');
+        if (lastSlashIndex > 0) {
+            return origin + path.substring(0, lastSlashIndex + 1);
+        }
+        return origin + '/';
+    }
+
     // ─── Inicialización ───────────────────────────────────────────────────────
 
     /**
@@ -193,10 +213,13 @@ window.ClerkSessionManager = (function () {
     async function signIn(redirectUrl) {
         if (_initialized && _clerkInstance) {
             try {
-                // Redirigir a página de login de Clerk
-                // (para frontends estáticos sin componentes React, usar redirectToSignIn)
+                // Convertir a URL absoluta para evitar problemas con Clerk redirigiendo a la raíz del dominio
+                const home = getHomeUrl();
+                const absRedirect = redirectUrl 
+                    ? (redirectUrl.startsWith('http') ? redirectUrl : new URL(redirectUrl, window.location.href).href)
+                    : home;
                 await _clerkInstance.redirectToSignIn({
-                    redirectUrl: redirectUrl || window.location.href,
+                    redirectUrl: absRedirect,
                 });
                 return;
             } catch (err) {
@@ -213,8 +236,12 @@ window.ClerkSessionManager = (function () {
     async function signUp(redirectUrl) {
         if (_initialized && _clerkInstance) {
             try {
+                const home = getHomeUrl();
+                const absRedirect = redirectUrl 
+                    ? (redirectUrl.startsWith('http') ? redirectUrl : new URL(redirectUrl, window.location.href).href)
+                    : home;
                 await _clerkInstance.redirectToSignUp({
-                    redirectUrl: redirectUrl || window.location.href,
+                    redirectUrl: absRedirect,
                 });
                 return;
             } catch (err) {
@@ -243,18 +270,22 @@ window.ClerkSessionManager = (function () {
         localStorage.removeItem('loggedInUser');
         localStorage.removeItem('lastPaymentPreference');
 
+        const home = getHomeUrl();
+
         // Cerrar sesión en Clerk si está activo
         if (_initialized && _clerkInstance) {
             try {
-                await _clerkInstance.signOut();
-                // Clerk redirigirá automáticamente si está configurado
+                await _clerkInstance.signOut({
+                    redirectUrl: home
+                });
+                return;
             } catch (err) {
                 console.warn('[ClerkAuth] Error en signOut Clerk:', err.message);
             }
         }
 
         // Redirigir a inicio
-        window.location.href = 'index.html';
+        window.location.href = home;
     }
 
     // ─── API pública ──────────────────────────────────────────────────────────
@@ -267,6 +298,7 @@ window.ClerkSessionManager = (function () {
         signIn,
         signUp,
         signOut,
+        getHomeUrl,
         /** @returns {boolean} Si Clerk está inicializado y disponible */
         isClerkActive: () => _initialized && !!_clerkInstance,
         /** @returns {object|null} Instancia interna de Clerk (para uso avanzado) */

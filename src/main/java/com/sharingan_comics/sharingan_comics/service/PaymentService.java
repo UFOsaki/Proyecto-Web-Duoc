@@ -67,13 +67,13 @@ public class PaymentService {
     }
 
     @Transactional
-    public CreatePreferenceResponse createPreference(CreatePreferenceRequest request, String usernameAuthenticated) {
+    public CreatePreferenceResponse createPreference(CreatePreferenceRequest request, Usuario usuario) {
         if (mpAccessToken == null || mpAccessToken.trim().isEmpty()) {
             throw new RuntimeException("El backend no tiene configurado el token de Mercado Pago.");
         }
-
-        Usuario usuario = usuarioRepository.findByUsername(usernameAuthenticated)
-                .orElseThrow(() -> new RuntimeException("Usuario autenticado no encontrado"));
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuario no puede ser nulo");
+        }
 
         // Verificar coherencia de email (advertencia, no bloqueo durante transición)
         // Los usuarios Clerk pueden tener emails diferentes a buyerEmail del carrito
