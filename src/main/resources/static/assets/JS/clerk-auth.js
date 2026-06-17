@@ -115,9 +115,9 @@ window.ClerkSessionManager = (function () {
      * @returns {boolean}
      */
     function isLoggedIn() {
-        // Primero verificar Clerk si está disponible
-        if (_initialized && _clerkInstance) {
-            return !!_clerkInstance.user;
+        // Primero verificar Clerk si está disponible y tiene sesión activa
+        if (_initialized && _clerkInstance && _clerkInstance.user) {
+            return true;
         }
         // Fallback: localStorage JWT local
         return localStorage.getItem('isLoggedIn') === 'true';
@@ -139,18 +139,15 @@ window.ClerkSessionManager = (function () {
                 // getToken() retorna un JWT de sesión corta duración (60 seg por defecto)
                 // Clerk lo refresca automáticamente.
                 const token = await _clerkInstance.session.getToken();
-                return token;
+                if (token) {
+                    return token;
+                }
             } catch (err) {
                 console.warn('[ClerkAuth] Error obteniendo token Clerk:', err.message || err);
-                // Fallback a JWT local en modo hybrid
-                if (mode === 'hybrid') {
-                    return localStorage.getItem('authToken');
-                }
-                return null;
             }
         }
 
-        // Modo local o Clerk no disponible
+        // Fallback a JWT local (modo local o Clerk no disponible/no autenticado)
         return localStorage.getItem('authToken');
     }
 
