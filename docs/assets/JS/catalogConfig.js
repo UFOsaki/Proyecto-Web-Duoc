@@ -107,7 +107,7 @@ function buildMangaItem(apiManga, baseUrl) {
 
     const rawImage = apiManga.imageUrl || apiManga.url || apiManga.image || "";
 
-    const finalImageUrl = (rawImage.startsWith("http") || rawImage.startsWith("assets") || rawImage.startsWith("/"))
+    const finalImageUrl = (rawImage.startsWith("http") || rawImage.startsWith("assets") || rawImage.startsWith("/assets") || rawImage.startsWith("data:"))
         ? rawImage
         : `${baseUrl}${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
 
