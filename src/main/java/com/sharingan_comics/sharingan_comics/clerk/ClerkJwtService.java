@@ -204,10 +204,16 @@ public class ClerkJwtService {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith((java.security.interfaces.RSAPublicKey) publicKey)
-                    .requireIssuer(clerkProperties.getIssuer())
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
+
+            String iss = claims.getIssuer();
+            String configuredIssuer = clerkProperties.getIssuer();
+            if (iss == null || (!iss.equals(configuredIssuer) && !iss.equals(configuredIssuer + "/"))) {
+                log.warn("[Clerk] Issuer no coincide. Token: {}, Configurado: {}", iss, configuredIssuer);
+                return Optional.empty();
+            }
 
             String clerkUserId = claims.getSubject();
             if (clerkUserId == null || clerkUserId.isBlank()) {
@@ -243,7 +249,7 @@ public class ClerkJwtService {
                     .build());
 
         } catch (Exception e) {
-            log.debug("[Clerk] Validación RSA fallida: {} — {}", e.getClass().getSimpleName(), e.getMessage());
+            log.warn("[Clerk] Validación RSA fallida: {} — {}", e.getClass().getSimpleName(), e.getMessage());
             return Optional.empty();
         }
     }

@@ -109,7 +109,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private void handleClerkToken(String token) {
         Optional<ClerkTokenClaims> claimsOpt = clerkJwtService.validateToken(token);
         if (claimsOpt.isEmpty()) {
-            log.debug("[JwtFilter] Token Clerk inválido o Clerk deshabilitado");
+            log.warn("[JwtFilter] Token Clerk inválido o Clerk deshabilitado");
             return;
         }
 
