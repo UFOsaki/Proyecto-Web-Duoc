@@ -58,3 +58,6 @@ clerk:
   issuer: ${CLERK_ISSUER:https://tender-coral-13.clerk.accounts.dev}
   jwks-url: ${CLERK_JWKS_URL:https://tender-coral-13.clerk.accounts.dev/.well-known/jwks.json}
   secret-key: ${CLERK_SECRET_KEY:}
+
+allowed:
+  origins: ${ALLOWED_ORIGINS:https://ufosaki.github.io,https://ufosaki.github.io/Proyecto-Web-Duoc,https://sharingan-comics-clerk.onrender.com,http://localhost:8080,http://127.0.0.1:5501}

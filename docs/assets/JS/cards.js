@@ -69,7 +69,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const primarySources = [];
         if (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.MANGA_API_BASE_URL) {
-            primarySources.push(`${APP_CONFIG.MANGA_API_BASE_URL}/images`);
+            const url = APP_CONFIG.MANGA_API_BASE_URL.endsWith('/images') || APP_CONFIG.MANGA_API_BASE_URL.endsWith('/images/')
+                ? APP_CONFIG.MANGA_API_BASE_URL
+                : `${APP_CONFIG.MANGA_API_BASE_URL}/images`;
+            primarySources.push(url);
         }
         primarySources.push('/api/mangas/images');
 

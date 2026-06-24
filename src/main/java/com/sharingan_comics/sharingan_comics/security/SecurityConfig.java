@@ -13,8 +13,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,6 +43,9 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+
+    @Value("${allowed.origins}")
+    private String allowedOrigins;
 
     public SecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
@@ -134,23 +139,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-            // ─── Desarrollo ──────────────────────────────────────────
-            "http://localhost:8080",
-            "http://localhost:5500",
-            "http://localhost:5501",
-            "http://127.0.0.1:5500",
-            "http://127.0.0.1:5501",
-            // ─── GitHub Pages (producción frontend) ──────────────────
-            "https://ufosaki.github.io",
-            "https://felipedev-one.github.io",
-            // ─── Clerk (para callbacks OAuth si aplica) ───────────────
-            "https://clerk.sharingancomics.com"
-            // Agregar URL de Render aquí cuando esté disponible:
-            // "https://sharingan-comics.onrender.com"
-        ));
+        
+        List<String> origins = Arrays.asList(allowedOrigins.split(","));
+        config.setAllowedOrigins(origins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);

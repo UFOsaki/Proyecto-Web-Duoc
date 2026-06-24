@@ -51,14 +51,17 @@ window.ClerkSessionManager = (function () {
      */
     function getHomeUrl() {
         const origin = window.location.origin;
-        const path = window.location.pathname;
-        if (path.includes('/Proyecto-Web-Duoc/')) {
-            return origin + '/Proyecto-Web-Duoc/';
+        const hostname = window.location.hostname;
+        
+        // GitHub Pages
+        if (hostname.includes('github.io')) {
+            return 'https://ufosaki.github.io/Proyecto-Web-Duoc/';
         }
-        const lastSlashIndex = path.lastIndexOf('/');
-        if (lastSlashIndex > 0) {
-            return origin + path.substring(0, lastSlashIndex + 1);
+        // Render
+        if (hostname.includes('onrender.com')) {
+            return 'https://sharingan-comics-clerk.onrender.com/';
         }
+        // Local (localhost, 127.0.0.1, etc.)
         return origin + '/';
     }
 
@@ -159,7 +162,7 @@ window.ClerkSessionManager = (function () {
                 // getToken() retorna un JWT de sesión corta duración (60 seg por defecto)
                 // Clerk lo refresca automáticamente.
                 const token = await _clerkInstance.session.getToken();
-                if (token) {
+                if (token && token !== 'null' && token !== 'undefined') {
                     return token;
                 }
             } catch (err) {
@@ -168,7 +171,11 @@ window.ClerkSessionManager = (function () {
         }
 
         // Fallback a JWT local (modo local o Clerk no disponible/no autenticado)
-        return localStorage.getItem('authToken');
+        const localToken = localStorage.getItem('authToken');
+        if (localToken === 'null' || localToken === 'undefined') {
+            return null;
+        }
+        return localToken;
     }
 
     /**

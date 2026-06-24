@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const loggedUser = getLoggedUser();
         const cart       = getCart();
 
-        if (!authToken) {
+        if (!authToken || authToken === 'null' || authToken === 'undefined') {
             throw new Error('NO_SESSION');
         }
 
@@ -312,8 +312,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     authToken = await ClerkSessionManager.getAuthToken();
                 }
                 // Fallback: JWT local en localStorage
-                if (!authToken) {
+                if (!authToken || authToken === 'null' || authToken === 'undefined') {
                     authToken = localStorage.getItem('authToken');
+                }
+                if (authToken === 'null' || authToken === 'undefined') {
+                    authToken = null;
                 }
 
                 // 2. Construir y validar payload (requiere authToken para verificar sesión)

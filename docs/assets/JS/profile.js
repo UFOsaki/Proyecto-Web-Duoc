@@ -27,12 +27,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Fallback a JWT local
-    if (!authToken) {
+    if (!authToken || authToken === 'null' || authToken === 'undefined') {
         authToken = localStorage.getItem('authToken');
     }
 
     // Sin sesión → redirigir a login
-    if (!authToken) {
+    if (!authToken || authToken === 'null' || authToken === 'undefined') {
         alert('Debes iniciar sesión para ver tu perfil.');
         window.location.href = 'login.html';
         return;
@@ -105,7 +105,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (typeof ClerkSessionManager !== 'undefined') {
                 token = await ClerkSessionManager.getAuthToken();
             }
-            if (!token) token = localStorage.getItem('authToken');
+            if (!token || token === 'null' || token === 'undefined') token = localStorage.getItem('authToken');
+            if (token === 'null' || token === 'undefined') token = null;
 
             try {
                 const res = await fetch(`${baseUrl}/profile`, {

@@ -20,27 +20,31 @@
  * Cumplimiento: Ley 21.719 (minimización de datos en frontend)
  */
 const APP_CONFIG = {
-    // ─── Backend Spring Boot ──────────────────────────────────────────────────
-    // Para desarrollo local:
-    AUTH_API_BASE_URL: 'http://localhost:8080/api/auth',
-    PAYMENT_API_BASE_URL: 'http://localhost:8080',
-    // Para producción Render (descomentar y actualizar):
-    // AUTH_API_BASE_URL: 'https://sharingan-comics.onrender.com/api/auth',
-    // PAYMENT_API_BASE_URL: 'https://sharingan-comics.onrender.com',
+    // Modo de autenticación: 'local' | 'clerk' | 'hybrid'
+    AUTH_MODE: "hybrid",
 
-    // ─── API externa de mangas (catálogo) ─────────────────────────────────────
-    MANGA_API_BASE_URL: 'https://api-rest-manga.onrender.com',
+    // URL Base de la API pública en Render
+    API_BASE_URL: "https://sharingan-comics-clerk.onrender.com",
 
-    // ─── Autenticación ────────────────────────────────────────────────────────
-    // Modo: 'local' | 'clerk' | 'hybrid'
-    // 'hybrid' = intenta Clerk primero, usa local si Clerk no disponible
-    AUTH_MODE: 'hybrid',
+    // Endpoint de autenticación (Render)
+    AUTH_API_BASE_URL: "https://sharingan-comics-clerk.onrender.com/api/auth",
 
-    // ─── Clerk (Identidad externa con 2FA/MFA y Google login) ─────────────────
-    // Clerk frontend API: https://tender-coral-13.clerk.accounts.dev
-    // Es SEGURO tener la publishable key en el frontend (es pública por diseño).
-    CLERK_PUBLISHABLE_KEY: 'pk_test_dGVuZGVyLWNvcmFsLTEzLmNsZXJrLmFjY291bnRzLmRldiQ',
+    // Endpoint de pagos (Render)
+    PAYMENT_API_BASE_URL: "https://sharingan-comics-clerk.onrender.com",
 
-    // URL de Clerk para configuración de cuentas
-    CLERK_ACCOUNT_PORTAL: 'https://accounts.clerk.dev',
+    // Endpoint de catálogo de mangas (Render)
+    MANGA_API_BASE_URL: "https://sharingan-comics-clerk.onrender.com/api/mangas/images",
+
+    // Clerk Publishable Key (Seguro en frontend)
+    CLERK_PUBLISHABLE_KEY: "pk_test_dGVuZGVyLWNvcmFsLTEzLmNsZXJrLmFjY291bnRzLmRldiQ",
+
+    /*
+     * CONFIGURACIÓN LOCAL (Para desarrollo y pruebas locales)
+     * Descomentar para desarrollo local:
+     * 
+     * API_BASE_URL: "http://localhost:8080",
+     * AUTH_API_BASE_URL: "http://localhost:8080/api/auth",
+     * PAYMENT_API_BASE_URL: "http://localhost:8080",
+     * MANGA_API_BASE_URL: "http://localhost:8080/api/mangas/images"
+     */
 };

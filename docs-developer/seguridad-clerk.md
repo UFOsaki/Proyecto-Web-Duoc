@@ -100,12 +100,17 @@ Reglas implementadas:
    - ⬜ **SMS** — opcional, tiene costos adicionales
 4. En **Authentication strategy**:
    - Social Login → habilitar **Google**
-5. En **Redirect URLs** agregar:
+5. En **Redirect URLs** y **Allowed Origins** agregar:
+   - `https://sharingan-comics-clerk.onrender.com`
+   - `https://sharingan-comics-clerk.onrender.com/`
+   - `https://sharingan-comics-clerk.onrender.com/index.html`
+   - `https://ufosaki.github.io`
+   - `https://ufosaki.github.io/Proyecto-Web-Duoc/`
    - `http://localhost:8080`
+   - `http://localhost:8080/`
    - `http://localhost:8080/index.html`
-   - `http://127.0.0.1:5500`
    - `http://127.0.0.1:5501`
-   - `https://ufosaki.github.io/Proyecto-Web-Duoc/index.html`
+   - `http://127.0.0.1:5501/`
 
 ### 2.2 Qué MFA se habilitó
 
@@ -230,15 +235,12 @@ Reglas implementadas:
 ### ⬜ Pendientes de configuración manual
 - [ ] Activar MFA (TOTP) en Clerk Dashboard → Configure → Multi-factor.
 - [ ] Activar Google como social provider → Configure → Social connections.
-- [ ] Agregar Redirect URLs en Clerk Dashboard:
-  - `http://localhost:8080/index.html`
-  - `https://ufosaki.github.io/Proyecto-Web-Duoc/index.html`
+- [ ] Agregar Redirect URLs en Clerk Dashboard (ver Sección 2.1).
 - [ ] Ejecutar `database/migrations/2026_clerk_auth.sql` en Oracle producción.
-- [ ] Configurar variables de entorno `CLERK_SECRET_KEY` en Render (si se necesita).
-- [ ] Agregar URL Render a CORS en `SecurityConfig.java` cuando esté disponible.
-- [ ] Agregar URL Render a Redirect URLs en Clerk Dashboard.
+- [ ] Configurar variables de entorno en Render (ver lista en README.md).
 
-### ⬜ Pendientes de prueba y evidencia
-- [ ] Probar flujo completo: Clerk login → `/api/auth/profile` → Mercado Pago.
-- [ ] Capturar las 14 evidencias del checklist en `docs-developer/evidencias/README.md`.
-- [ ] Planificar migración completa cuando Clerk esté validado (remover JWT local).
+### ✅ Completados en esta iteración
+- [x] Configurar CORS dinámico por variable de entorno `ALLOWED_ORIGINS` en `CorsConfig.java` y `SecurityConfig.java`.
+- [x] Actualizar `APP_CONFIG` centralizado para usar la API de Render en producción.
+- [x] Ajustar redirección de `getHomeUrl()` en `clerk-auth.js` según el dominio de ejecución actual.
+- [x] Proteger `getAuthToken()` y llamadas fetch contra tokens con valor `"null"` o `"undefined"`.
